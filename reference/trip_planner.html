@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boston + NYC Trip — April 25 to May 2</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f5f3ee;
+    color: #2c2c2a;
+    line-height: 1.5;
+    padding-bottom: 60px;
+  }
+  header {
+    background: #1a1a1a;
+    color: #f5f3ee;
+    padding: 28px 32px;
+  }
+  header h1 { font-size: 24px; font-weight: 500; margin-bottom: 4px; }
+  header p { font-size: 14px; color: #b4b2a9; }
+  nav {
+    display: flex;
+    gap: 4px;
+    background: #2c2c2a;
+    padding: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    overflow-x: auto;
+  }
+  nav button {
+    background: transparent;
+    color: #b4b2a9;
+    border: none;
+    padding: 10px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 6px;
+    white-space: nowrap;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  nav button:hover { background: #444441; color: #f5f3ee; }
+  nav button.active { background: #f5f3ee; color: #2c2c2a; }
+  main { max-width: 980px; margin: 0 auto; padding: 32px 24px; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Day header */
+  .day-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 2px solid #2c2c2a;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .day-header h2 { font-size: 22px; font-weight: 500; }
+  .day-header .date { font-size: 14px; color: #5f5e5a; font-weight: 400; }
+  .day-header .city {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: #2c2c2a;
+    color: #f5f3ee;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  /* Schedule blocks */
+  .schedule-grid {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 0;
+    background: #ffffff;
+    border: 1px solid #d3d1c7;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .time-slot {
+    padding: 16px 14px;
+    border-bottom: 1px solid #ece9e0;
+    font-size: 13px;
+    color: #5f5e5a;
+    font-weight: 500;
+    background: #faf8f2;
+    border-right: 1px solid #ece9e0;
+  }
+  .activity-slot {
+    padding: 16px 18px;
+    border-bottom: 1px solid #ece9e0;
+  }
+  .time-slot:last-of-type, .activity-slot:last-of-type { border-bottom: none; }
+  .activity-slot h4 { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+  .activity-slot .location { font-size: 12px; color: #888780; margin-bottom: 6px; }
+  .activity-slot .details { font-size: 13px; color: #444441; line-height: 1.5; }
+  .activity-slot .cost {
+    display: inline-block;
+    font-size: 11px;
+    background: #eaf3de;
+    color: #27500a;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-top: 6px;
+    margin-right: 4px;
+    font-weight: 500;
+  }
+  .activity-slot .transit {
+    display: inline-block;
+    font-size: 11px;
+    background: #e6f1fb;
+    color: #0c447c;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-top: 6px;
+    margin-right: 4px;
+    font-weight: 500;
+  }
+  .activity-slot .tip {
+    display: inline-block;
+    font-size: 11px;
+    background: #faeeda;
+    color: #633806;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .travel-block {
+    background: #2c2c2a !important;
+    color: #f5f3ee;
+  }
+  .travel-block .location, .travel-block .details { color: #d3d1c7; }
+  .free-block { background: #faf8f2; color: #888780; font-style: italic; }
+
+  /* Todo list */
+  .todo-section { margin-bottom: 32px; }
+  .todo-section h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 14px;
+    color: #2c2c2a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .todo-section h3::before {
+    content: '';
+    width: 4px;
+    height: 18px;
+    background: #d85a30;
+    border-radius: 2px;
+  }
+  .todo-section.before h3::before { background: #d85a30; }
+  .todo-section.boston h3::before { background: #378add; }
+  .todo-section.nyc h3::before { background: #1d9e75; }
+  .todo-section.packing h3::before { background: #ba7517; }
+  .todo-list { background: #ffffff; border: 1px solid #d3d1c7; border-radius: 10px; overflow: hidden; }
+  .todo-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 14px 16px;
+    border-bottom: 1px solid #ece9e0;
+    cursor: pointer;
+    transition: background 0.1s;
+    gap: 12px;
+  }
+  .todo-item:last-child { border-bottom: none; }
+  .todo-item:hover { background: #faf8f2; }
+  .todo-item input[type="checkbox"] {
+    margin-top: 3px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #2c2c2a;
+  }
+  .todo-item-content { flex: 1; }
+  .todo-item .title { font-size: 14px; font-weight: 500; }
+  .todo-item .desc { font-size: 12px; color: #5f5e5a; margin-top: 3px; }
+  .todo-item.done .title, .todo-item.done .desc {
+    text-decoration: line-through;
+    color: #b4b2a9;
+  }
+
+  /* Progress bar */
+  .progress-wrapper {
+    background: #ffffff;
+    border: 1px solid #d3d1c7;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 24px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .progress-bar {
+    height: 8px;
+    background: #ece9e0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: #1d9e75;
+    transition: width 0.3s;
+  }
+
+  /* Info cards */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .info-card {
+    background: #ffffff;
+    border: 1px solid #d3d1c7;
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .info-card h4 {
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #888780;
+    margin-bottom: 8px;
+  }
+  .info-card p { font-size: 14px; color: #2c2c2a; }
+  .info-card .big { font-size: 20px; font-weight: 500; color: #2c2c2a; }
+
+  /* Section intro */
+  .section-intro {
+    background: #ffffff;
+    border-left: 4px solid #2c2c2a;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: #444441;
+    border-radius: 0 8px 8px 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    header { padding: 20px 20px; }
+    header h1 { font-size: 20px; }
+    main { padding: 20px 16px; }
+    .schedule-grid { grid-template-columns: 80px 1fr; }
+    .time-slot { padding: 12px 10px; font-size: 11px; }
+    .activity-slot { padding: 12px 14px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Boston + NYC trip</h1>
+  <p>Saturday April 25 → Saturday May 2, 2026 &nbsp;·&nbsp; 8 days</p>
+</header>
+
+<nav id="nav"></nav>
+
+<main>
+  <!-- Overview -->
+  <div class="view active" id="view-overview">
+    <div class="section-intro">
+      Click each day to see the full schedule. Use the to-do list to track everything you need to book or pack before leaving. Your progress is saved automatically across sessions.
+    </div>
+    <div class="info-grid">
+      <div class="info-card"><h4>Departure</h4><p class="big">Apr 25</p><p>Drive from Sault Ste. Marie → Boston</p></div>
+      <div class="info-card"><h4>Boston → NYC</h4><p class="big">Apr 28</p><p>Afternoon bus, ~4.5 hrs</p></div>
+      <div class="info-card"><h4>Return flight</h4><p class="big">May 2</p><p>7:00 PM from LGA</p></div>
+      <div class="info-card"><h4>Stay #1</h4><p class="big">Downtown 02109</p><p>Financial District / Waterfront · 3 nights</p></div>
+      <div class="info-card"><h4>Stay #2</h4><p class="big">LIC, Queens</p><p>42 24th St · 4 nights</p></div>
+      <div class="info-card"><h4>Climbing gyms</h4><p class="big">2 iconic</p><p>Bouldering Project · The Cliffs at LIC</p></div>
+    </div>
+    <div id="overview-progress" style="margin-top: 32px;"></div>
+  </div>
+
+  <!-- Day views get injected here -->
+  <div class="view" id="view-todos">
+    <div id="todos-container"></div>
+  </div>
+</main>
+
+<script>
+// ========== DATA ==========
+const days = [
+  {
+    id: "day1",
+    label: "Sat 4/25",
+    title: "Day 1 — Arrival",
+    date: "Saturday, April 25",
+    city: "Boston",
+    blocks: [
+      { time: "Morning", type: "travel", title: "Drive to Boston", location: "Sault Ste. Marie → Boston",
+        details: "8-hour drive with your friend. Pack snacks, download offline maps, podcasts.",
+        tags: [{ type: "transit", text: "8 hrs by car" }] },
+      { time: "~7:00 PM", type: "normal", title: "Arrive at couch surfing spot", location: "Downtown 02109 (Financial District / Waterfront)",
+        details: "Drop bags, meet your host, settle in. You're right in the heart of old Boston.",
+        tags: [] },
+      { time: "8:00 PM", type: "normal", title: "Dinner in the North End", location: "5 min walk from 02109",
+        details: "You're steps from Little Italy. Pick one: Regina Pizzeria (brick-oven, $20), Giacomo's (cash-only red-sauce legend, $25), or grab a cannoli at Modern Pastry.",
+        tags: [{ type: "cost", text: "$20-30" }, { type: "tip", text: "Modern > Mike's for cannoli" }] },
+      { time: "10:00 PM", type: "free", title: "Early sleep", location: "",
+        details: "Tomorrow is a big walking day. Rest up.", tags: [] }
+    ]
+  },
+  {
+    id: "day2",
+    label: "Sun 4/26",
+    title: "Day 2 — Freedom Trail",
+    date: "Sunday, April 26",
+    city: "Boston",
+    blocks: [
+      { time: "9:00 AM", type: "normal", title: "Freedom Trail Visitor Center", location: "139 Tremont St, Boston Common",
+        details: "Walk 10 min from 02109 to the start. Grab the $3 map booklet — the red brick line guides the whole 2.5 miles.",
+        tags: [{ type: "cost", text: "$3 map" }, { type: "transit", text: "10 min walk" }] },
+      { time: "9:30 AM", type: "normal", title: "Trail: Common → Old State House", location: "Freedom Trail, first half",
+        details: "MA State House (gold dome) → Park Street Church → Granary Burying Ground (Paul Revere's grave) → King's Chapel → Old South Meeting House ($15) → Old State House ($15, Boston Massacre site).",
+        tags: [{ type: "cost", text: "$15-30 museums" }] },
+      { time: "12:30 PM", type: "normal", title: "Lunch at Quincy Market", location: "Faneuil Hall Marketplace",
+        details: "Mid-trail pit stop. Chowder in a bread bowl, lobster roll, whatever calls you. Food hall, tons of options.",
+        tags: [{ type: "cost", text: "$15-25" }] },
+      { time: "1:30 PM", type: "normal", title: "Trail: North End → Charlestown", location: "Freedom Trail, second half",
+        details: "Paul Revere House ($6, quick 15 min) → Old North Church (free, 'one if by land...') → Copp's Hill Burying Ground → over the bridge to Charlestown.",
+        tags: [{ type: "cost", text: "$6" }] },
+      { time: "4:00 PM", type: "normal", title: "Bunker Hill + USS Constitution", location: "Charlestown",
+        details: "Bunker Hill Monument — climb the 294 stairs for the view (FREE). USS Constitution — oldest commissioned warship in the world (FREE, bring photo ID).",
+        tags: [{ type: "cost", text: "Free" }, { type: "tip", text: "Bring ID for USS Constitution" }] },
+      { time: "7:00 PM", type: "normal", title: "Dinner — Neptune Oyster", location: "63 Salem St, North End",
+        details: "Famous lobster roll ($35). No reservations, expect a wait — or skip to Regina Pizzeria / Giacomo's if the line is too long.",
+        tags: [{ type: "cost", text: "$35-50" }, { type: "tip", text: "Show up right at open or expect 1hr+ wait" }] },
+      { time: "9:30 PM", type: "normal", title: "Walk back to 02109", location: "",
+        details: "5 minute walk. You're staying right here. Perfect location for tonight.",
+        tags: [{ type: "transit", text: "5 min walk" }] }
+    ]
+  },
+  {
+    id: "day3",
+    label: "Mon 4/27",
+    title: "Day 3 — Cambridge + MFA",
+    date: "Monday, April 27",
+    city: "Boston",
+    blocks: [
+      { time: "9:30 AM", type: "normal", title: "Subway to Harvard", location: "State St → Park St → Harvard",
+        details: "Blue Line from State Street → transfer at Park Street to Red Line → Harvard Square. About 25 min.",
+        tags: [{ type: "transit", text: "Blue + Red Line, $2.40" }] },
+      { time: "10:00 AM", type: "normal", title: "Harvard Yard + Harvard Art Museums", location: "Cambridge, MA",
+        details: "Walk Harvard Yard (free), rub John Harvard's shoe. Harvard Art Museums are FREE for everyone — Monet, Van Gogh, Rothko. Allow 1-1.5 hrs.",
+        tags: [{ type: "cost", text: "Free" }] },
+      { time: "12:30 PM", type: "normal", title: "Lunch in Harvard Square", location: "",
+        details: "Felipe's Taqueria ($12), Bartley's Burger Cottage ($18, legendary), or Tatte Bakery for something lighter.",
+        tags: [{ type: "cost", text: "$12-18" }] },
+      { time: "2:00 PM", type: "normal", title: "MIT", location: "Kendall/MIT station",
+        details: "Red Line: Harvard → Kendall/MIT (10 min). Walk the Infinite Corridor, see the Great Dome, poke into the Stata Center (Frank Gehry's wild building). MIT Museum $18 ($12 student) — worth it for AI/robotics.",
+        tags: [{ type: "cost", text: "$12 student" }, { type: "transit", text: "Red Line, 10 min" }] },
+      { time: "4:30 PM", type: "normal", title: "Public Garden + Swan Boats", location: "Arlington Station",
+        details: "Red Line → Park Street → walk into Public Garden. Swan Boats ($4.75, 15 min, pay cash), Make Way for Ducklings statues, cherry trees (possibly still blooming!). Walk through Boston Common next door.",
+        tags: [{ type: "cost", text: "$4.75" }, { type: "tip", text: "Garden free, boats cash only" }] },
+      { time: "6:30 PM", type: "normal", title: "MFA OR climbing — pick one", location: "",
+        details: "Option A: Museum of Fine Arts until close (~$26 student, great Egyptian + Sargent collections). Option B: Rock Spot Climbing South Boston ($25 day pass, 15 min T ride). Both are solid — climbing gym is 10 min Red Line from Back Bay.",
+        tags: [{ type: "cost", text: "$25-26" }, { type: "tip", text: "MFA closes 5pm Mon. Go to climbing." }] },
+      { time: "8:30 PM", type: "normal", title: "Dinner in the South End or Back Bay", location: "",
+        details: "Yvonne's (trendy, Back Bay, $$$), Atlantic Fish Co. (seafood, $$-$$$), or Tasty Burger (casual, South End).",
+        tags: [{ type: "cost", text: "$20-40" }] }
+    ]
+  },
+  {
+    id: "day4",
+    label: "Tue 4/28",
+    title: "Day 4 — Boston → NYC",
+    date: "Tuesday, April 28",
+    city: "Travel",
+    blocks: [
+      { time: "9:30 AM", type: "normal", title: "Breakfast + pack", location: "02109",
+        details: "Coffee at Tatte or a local cafe. Pack up, check out. You've got time.",
+        tags: [] },
+      { time: "11:00 AM", type: "normal", title: "One last Boston thing", location: "",
+        details: "Options: Boston Public Library (Bates Reading Room, free, stunning), Beacon Hill / Acorn Street walk, or any spot you missed.",
+        tags: [{ type: "cost", text: "Free" }] },
+      { time: "12:30 PM", type: "normal", title: "Walk to South Station", location: "Atlantic Ave",
+        details: "10-15 min walk from 02109. Or Uber ($8). Arrive 30 min before bus.",
+        tags: [{ type: "transit", text: "15 min walk" }] },
+      { time: "1:30 PM", type: "travel", title: "Bus: Boston → NYC", location: "South Station → Port Authority",
+        details: "FlixBus / Peter Pan / Megabus, ~$25-40, ~4.5 hours. Book on Wanderu or Busbud 2-3 days ahead. Wifi + power outlets.",
+        tags: [{ type: "cost", text: "$25-40" }, { type: "transit", text: "4.5 hrs" }] },
+      { time: "6:30 PM", type: "travel", title: "Arrive NYC → LIC", location: "Port Authority → Vernon Blvd",
+        details: "7 train (Flushing-bound) from Times Square-42nd St → Vernon Blvd-Jackson Ave (2 stops, 10 min). Walk 5 min to 42 24th St.",
+        tags: [{ type: "transit", text: "7 train, $2.90" }] },
+      { time: "8:00 PM", type: "normal", title: "Dinner in LIC + skyline view", location: "Gantry Plaza State Park",
+        details: "LIC is underrated. John Brown Smokehouse (BBQ, cheap), Casa Enrique (Michelin Mexican, pricey), or grab cheap eats and walk to Gantry Plaza State Park for the BEST Manhattan skyline view in the entire city. Free. Iconic.",
+        tags: [{ type: "cost", text: "$12-40" }, { type: "tip", text: "Gantry Plaza at sunset = best NYC view" }] }
+    ]
+  },
+  {
+    id: "day5",
+    label: "Wed 4/29",
+    title: "Day 5 — Midtown + Broadway",
+    date: "Wednesday, April 29",
+    city: "NYC",
+    blocks: [
+      { time: "BEFORE 9 AM", type: "normal", title: "ENTER BROADWAY LOTTERIES", location: "TodayTix app",
+        details: "CRITICAL: Submit digital lotteries for tonight's shows. Free to enter. Best picks for your budget: Hamilton ($10, Fri only), & Juliet ($47 rush), Book of Mormon ($49), Every Brilliant Thing ($45). Winners notified mid-morning.",
+        tags: [{ type: "cost", text: "$10-49" }, { type: "tip", text: "Enter multiple shows to maximize odds" }] },
+      { time: "9:00 AM", type: "normal", title: "Subway to Midtown", location: "Vernon Blvd → Grand Central",
+        details: "7 train to Grand Central-42nd St. 10 min ride.",
+        tags: [{ type: "transit", text: "7 train, $2.90" }] },
+      { time: "9:30 AM", type: "normal", title: "Grand Central + Bryant Park + NYPL", location: "Midtown East",
+        details: "Grand Central: free, see the celestial ceiling. Try the Whispering Gallery (stand diagonally across the arch near the Oyster Bar). Walk to Bryant Park (5 min) + New York Public Library (free, Rose Reading Room is stunning, lions out front).",
+        tags: [{ type: "cost", text: "Free" }] },
+      { time: "11:30 AM", type: "normal", title: "Rockefeller Center + lunch", location: "30 Rockefeller Plaza",
+        details: "See Atlas statue, skating rink area. Grab a slice from Joe's Pizza ($4) or bagel from Ess-a-Bagel ($10) for lunch.",
+        tags: [{ type: "cost", text: "$4-15" }] },
+      { time: "1:30 PM", type: "normal", title: "Central Park — walk through", location: "59th to 72nd St",
+        details: "Enter at Columbus Circle. Walk: Pond → Wollman Rink → Sheep Meadow → The Mall → Bethesda Terrace + Fountain (iconic) → Bow Bridge → Strawberry Fields. Exit 72nd St W. ~2.5 miles, relaxed pace.",
+        tags: [{ type: "cost", text: "Free" }, { type: "transit", text: "On foot" }] },
+      { time: "4:30 PM", type: "free", title: "Rest / coffee", location: "Anywhere Midtown",
+        details: "You've been walking a lot. Grab a coffee, sit down.",
+        tags: [] },
+      { time: "6:00 PM", type: "normal", title: "Top of the Rock — SUNSET SLOT", location: "30 Rockefeller Plaza",
+        details: "BOOK IN ADVANCE. The only observation deck that has the Empire State Building IN the view. Go at sunset — you see daylight → golden hour → city lights. Best 30 min of the trip.",
+        tags: [{ type: "cost", text: "~$40" }, { type: "tip", text: "Book online before trip" }] },
+      { time: "7:00 PM", type: "normal", title: "Quick dinner near theater", location: "Midtown",
+        details: "Los Tacos No. 1 ($15), The Halal Guys cart at 53rd & 6th ($12, NYC icon), or any quick slice.",
+        tags: [{ type: "cost", text: "$12-20" }] },
+      { time: "8:00 PM", type: "normal", title: "Broadway show!", location: "Theater District",
+        details: "Go directly to your theater by 7:30 PM. Print your ticket confirmation if required.",
+        tags: [{ type: "cost", text: "Lottery/rush price" }] },
+      { time: "10:45 PM", type: "normal", title: "Times Square at night + subway home", location: "",
+        details: "Wander Times Square briefly (it's an experience). 7 train back to Vernon Blvd-Jackson Ave.",
+        tags: [{ type: "transit", text: "7 train" }] }
+    ]
+  },
+  {
+    id: "day6",
+    label: "Thu 4/30",
+    title: "Day 6 — Downtown + Brooklyn",
+    date: "Thursday, April 30",
+    city: "NYC",
+    blocks: [
+      { time: "9:00 AM", type: "normal", title: "Subway to Battery Park", location: "Vernon Blvd → Bowling Green",
+        details: "7 → Grand Central → 4/5 Express → Bowling Green. ~30 min. Walk to Statue Cruises entrance.",
+        tags: [{ type: "transit", text: "7 + 4/5 Express" }, { type: "tip", text: "Book ferry online in advance!" }] },
+      { time: "10:00 AM", type: "normal", title: "Statue of Liberty + Ellis Island", location: "Liberty + Ellis Islands",
+        details: "Ferry to Liberty Island (~20 min), walk around Lady Liberty, short museum. Ferry to Ellis Island (~10 min) — Immigration Museum is genuinely moving, the more powerful of the two. Ferry back to Battery Park.",
+        tags: [{ type: "cost", text: "~$25" }, { type: "tip", text: "Airport-style security, come early" }] },
+      { time: "2:00 PM", type: "normal", title: "Lunch near Financial District", location: "Stone Street or Eataly",
+        details: "Stone Street — historic pedestrian strip with pubs. Or Eataly Financial District (Italian market/food hall).",
+        tags: [{ type: "cost", text: "$15-25" }] },
+      { time: "3:00 PM", type: "normal", title: "9/11 Memorial + Oculus", location: "180 Greenwich St",
+        details: "Outdoor memorial pools are free and powerful. Museum is $29 (students) — 2+ hours, emotional, skip if you're overwhelmed. The Oculus (Santiago Calatrava's white transit hub) is free to walk through, wild architecture.",
+        tags: [{ type: "cost", text: "Free - $29" }] },
+      { time: "5:00 PM", type: "normal", title: "Walk the Brooklyn Bridge", location: "Manhattan → Brooklyn",
+        details: "1.1 mi, ~30 min, stunning views. FREE. Stay on the pedestrian path (not bike lane). End in DUMBO.",
+        tags: [{ type: "cost", text: "Free" }, { type: "transit", text: "On foot" }] },
+      { time: "6:00 PM", type: "normal", title: "DUMBO photo op + pizza", location: "Washington St, Brooklyn",
+        details: "Iconic photo: Washington Street with Empire State Building framed inside the Manhattan Bridge arch. Then Juliana's Pizza (best pizza in NYC — fight me). Margherita $25, feeds 2-3.",
+        tags: [{ type: "cost", text: "$25" }] },
+      { time: "8:00 PM", type: "normal", title: "Brooklyn Bridge Park + Jane's Carousel", location: "",
+        details: "Waterfront park with the best Manhattan skyline view from below. Jane's Carousel ($2 if open).",
+        tags: [{ type: "cost", text: "Free-$2" }] },
+      { time: "9:30 PM", type: "normal", title: "ICONIC CLIMB — The Cliffs at LIC", location: "11-11 44th Dr, LIC",
+        details: "Also called Movement LIC. 9 min walk from your accommodation. Open until 11 PM. 45-ft walls, 2 floors of bouldering, lead cave — one of NYC's premier gyms. Day pass ~$38.",
+        tags: [{ type: "cost", text: "~$38" }, { type: "tip", text: "9 min from home, iconic, can't miss" }] }
+    ]
+  },
+  {
+    id: "day7",
+    label: "Fri 5/1",
+    title: "Day 7 — West Side + Village",
+    date: "Friday, May 1",
+    city: "NYC",
+    blocks: [
+      { time: "10:00 AM", type: "normal", title: "Subway to The High Line", location: "Vernon Blvd → 14th St",
+        details: "7 train → Times Sq → 1 downtown to 14th St. Enter High Line at Gansevoort Street (south end, Meatpacking District).",
+        tags: [{ type: "transit", text: "7 + 1 train" }] },
+      { time: "10:30 AM", type: "normal", title: "Walk The High Line", location: "Gansevoort → Hudson Yards",
+        details: "Elevated park on old rail line. 1.5 miles. Stop into Chelsea Market (connected halfway) for lunch.",
+        tags: [{ type: "cost", text: "Free" }] },
+      { time: "12:30 PM", type: "normal", title: "Lunch at Chelsea Market", location: "75 9th Ave",
+        details: "Los Tacos No. 1 (iconic, always worth the line, $15), Cull & Pistol lobster roll, or The Bagel Store.",
+        tags: [{ type: "cost", text: "$15-25" }] },
+      { time: "2:00 PM", type: "normal", title: "Greenwich Village wander", location: "West Village",
+        details: "Subway to W 4th St. Wander: MacDougal St, Bleecker St, Washington Square Park (NYU arch, chess players, buskers). Coffee at Caffe Reggio (1927) or Joe Coffee.",
+        tags: [{ type: "cost", text: "$5-10 coffee" }] },
+      { time: "4:00 PM", type: "normal", title: "The Strand Bookstore", location: "828 Broadway, Union Sq",
+        details: "18 miles of books. Easy to lose 90 min here. Iconic.",
+        tags: [{ type: "cost", text: "Free to browse" }] },
+      { time: "5:30 PM", type: "normal", title: "Subway → Lower East Side", location: "Union Sq → Delancey-Essex",
+            details: "F or M train to Delancey-Essex St. Easy transfer.",
+        tags: [{ type: "transit", text: "F/M train" }] },
+      { time: "6:00 PM", type: "normal", title: "Katz's Delicatessen", location: "205 E Houston St",
+        details: "Pastrami on rye ($28, huge portion). NYC icon. When Harry Met Sally table is marked. Go early to avoid lines.",
+        tags: [{ type: "cost", text: "$28" }, { type: "tip", text: "Don't lose your ticket — big fine" }] },
+      { time: "7:30 PM", type: "normal", title: "East Village stroll + Economy Candy", location: "",
+        details: "Walk Tompkins Square Park. Stop at Economy Candy (Rivington St, iconic since 1937).",
+        tags: [{ type: "cost", text: "$5-15" }] },
+      { time: "9:00 PM", type: "normal", title: "Optional: McSorley's Old Ale House", location: "15 E 7th St",
+        details: "NYC's oldest Irish bar (1854). Cash only, $5 beers. Living piece of history. Or just head home early to pack.",
+        tags: [{ type: "cost", text: "$5-15" }, { type: "tip", text: "21+, bring passport" }] }
+    ]
+  },
+  {
+    id: "day8",
+    label: "Sat 5/2",
+    title: "Day 8 — Departure",
+    date: "Saturday, May 2",
+    city: "NYC → Home",
+    blocks: [
+      { time: "9:30 AM", type: "normal", title: "Slow breakfast in LIC", location: "Sweetleaf Coffee or local cafe",
+        details: "Nothing rushed. Pack up gradually. Your flight is 7 PM — you have all day.",
+        tags: [{ type: "cost", text: "$10-15" }] },
+      { time: "11:00 AM", type: "normal", title: "One last NYC thing (pick one)", location: "",
+        details: "Options: MoMA ($17 student — Starry Night, Water Lilies, Picasso, Warhol), one more climb at The Cliffs at LIC (it's right there), or just relax at Gantry Plaza Park.",
+        tags: [{ type: "cost", text: "$0-17" }] },
+      { time: "2:00 PM", type: "normal", title: "Final pack + check out", location: "42 24th St, LIC",
+        details: "Back to accommodation. Pack fully. Say goodbye to your host.",
+        tags: [] },
+      { time: "2:30 PM", type: "normal", title: "Lunch — grab and go", location: "LIC",
+        details: "Anything easy. Don't start a big meal — you've got a flight.",
+        tags: [{ type: "cost", text: "$10-15" }] },
+      { time: "4:00 PM", type: "travel", title: "LIC → LaGuardia", location: "LGA",
+        details: "Q70 SBS bus from Roosevelt Ave ($2.90, ~20 min) OR Uber/Lyft ($20-30, 15-20 min). Uber is the stress-free call.",
+        tags: [{ type: "cost", text: "$3-30" }, { type: "transit", text: "15-20 min" }] },
+      { time: "5:00 PM", type: "normal", title: "Airport + security", location: "LGA",
+        details: "2 hours before a domestic flight at LGA is fine. For int'l to Canada, treat like 2.5 hrs (US-CA pre-clearance can be slow).",
+        tags: [{ type: "tip", text: "Bring passport + reservation" }] },
+      { time: "7:00 PM", type: "travel", title: "Flight home", location: "LGA → Home",
+        details: "You did it. 8 days, 2 cities, countless memories. Well done!",
+        tags: [] }
+    ]
+  }
+];
+
+const todoSections = [
+  {
+    id: "before",
+    title: "Before you leave Canada",
+    className: "before",
+    items: [
+      { id: "insurance", title: "Book travel insurance", desc: "$25-40 for 8 days (RBC, Manulife, SquareMouth). A single US ER visit can be $5k+. Non-negotiable." },
+      { id: "esim", title: "Buy US eSIM", desc: "Airalo, Holafly, or Ubigi. ~$15-25 for 5-10GB over the trip. Install at home over wifi. Keeps your Canadian SIM active for calls/texts." },
+      { id: "offline-maps", title: "Download Google Maps offline for Boston + NYC", desc: "Settings → Offline maps → select each city. Works without data." },
+      { id: "apps", title: "Download all apps", desc: "TodayTix, Transit (or Citymapper for NYC), MBTA, Uber, Lyft, Wanderu, Google Maps" },
+      { id: "bank", title: "Notify your bank about US travel", desc: "Prevents frozen cards. Do it online in your banking app." },
+      { id: "statue", title: "Book Statue of Liberty ferry online", desc: "statuecruises.com, April 30 10 AM slot, ~$25. Gets pedestal access. Sells out." },
+      { id: "topofrock", title: "Book Top of the Rock sunset slot", desc: "April 29, ~$40. Book a slot ~60 min before sunset for best experience." },
+      { id: "bus", title: "Book Boston→NYC bus", desc: "Wanderu or Busbud, April 28 early afternoon. $25-40. Book 3-5 days ahead for best price." },
+      { id: "photocopy", title: "Photo of passport + ID", desc: "Keep in your phone + email to yourself. For if anything gets lost." },
+      { id: "student-id", title: "Verify your Queen's student ID is current", desc: "Gets you MFA student price ($26), MoMA ($17), Broadway student rush ($25)." }
+    ]
+  },
+  {
+    id: "boston",
+    title: "Boston day-of",
+    className: "boston",
+    items: [
+      { id: "freedomtrail-map", title: "Buy the Freedom Trail map booklet ($3)", desc: "At the Visitor Center, 139 Tremont St. Worth it — the self-guided booklet is genuinely informative." },
+      { id: "neptune", title: "Plan Neptune Oyster timing", desc: "No reservations. Either be there 30 min before open OR go 2-3 PM weekday. Dinner prime time = 1hr+ wait." },
+      { id: "mfa-exhibitions", title: "Check what's on at the MFA before going", desc: "Framing Nature (through June 28), Unbraid: Hair Clay Craft (through July 26). General admission ~$26 student." },
+      { id: "climbing-gear", title: "Plan climbing shoe rental or bring your own", desc: "Rock Spot rentals are ~$5. If you already own shoes, pack them." }
+    ]
+  },
+  {
+    id: "nyc",
+    title: "NYC day-of",
+    className: "nyc",
+    items: [
+      { id: "lottery-daily", title: "Enter Broadway lotteries daily by 9 AM", desc: "TodayTix app. Enter multiple shows to maximize odds. Winners notified 11 AM - 1 PM." },
+      { id: "metro-card", title: "Use Apple Pay / Google Pay at subway turnstiles", desc: "OMNY system — just tap your phone/card. No need to buy a MetroCard. $2.90 per ride, caps at $34/week." },
+      { id: "cliffs-waiver", title: "Fill Cliffs at LIC waiver online beforehand", desc: "Saves 15 min at check-in. movementgyms.com/lic" },
+      { id: "broadway-backup", title: "Backup Broadway plan: TKTS booth", desc: "Times Sq booth, opens 3 PM (11 AM Wed/Thu/Sat). Same-day tix 20-50% off if lottery fails." },
+      { id: "airport-plan", title: "Day 8 - set 4 PM alarm to leave for airport", desc: "Q70 bus or Uber. LGA is 15-20 min from LIC. Be there by 5 PM for 7 PM flight." }
+    ]
+  },
+  {
+    id: "packing",
+    title: "Packing",
+    className: "packing",
+    items: [
+      { id: "passport", title: "Passport", desc: "Check expiry date is 6+ months out. Put it somewhere you won't forget." },
+      { id: "walking-shoes", title: "Broken-in walking shoes", desc: "You're doing 15-20k steps daily. DO NOT bring brand new shoes — your feet will hate you." },
+      { id: "backpack", title: "Small day backpack", desc: "For your daily essentials (water, jacket, snacks, charger)." },
+      { id: "water-bottle", title: "Refillable water bottle", desc: "US water fountains are everywhere." },
+      { id: "rain-jacket", title: "Light rain jacket + one warm layer", desc: "April-May in NE US: highs 55-65°F, lows 45°F, chance of rain. Layers are key." },
+      { id: "phone-charger", title: "Phone charger + portable power bank", desc: "You'll drain your battery using Maps + TodayTix all day." },
+      { id: "credit-card", title: "Credit card(s) with no foreign transaction fee", desc: "Rogers World Elite, Scotia Passport Visa, or similar. Bring a backup card too." },
+      { id: "cash", title: "$40-60 USD cash", desc: "Emergency buffer. Most places are card-only but Swan Boats, McSorley's, buskers are cash." },
+      { id: "climbing-shoes", title: "Climbing shoes (if you own them)", desc: "Saves $5-10 in rentals at each gym." },
+      { id: "meds", title: "Any prescription meds + basics", desc: "Tylenol, bandaids, anything specific you use. Pharmacies exist in the US but it's easier to bring." }
+    ]
+  }
+];
+
+// ========== STORAGE ==========
+async function loadChecks() {
+  try {
+    const result = await window.storage.get('trip-checks');
+    if (result && result.value) return JSON.parse(result.value);
+  } catch (e) { /* key doesn't exist yet */ }
+  return {};
+}
+async function saveChecks(checks) {
+  try { await window.storage.set('trip-checks', JSON.stringify(checks)); } catch (e) {}
+}
+let checks = {};
+
+// ========== RENDERING ==========
+function renderNav() {
+  const nav = document.getElementById('nav');
+  const buttons = [{ id: 'overview', label: 'Overview' }]
+    .concat(days.map(d => ({ id: d.id, label: d.label })))
+    .concat([{ id: 'todos', label: 'To-do list' }]);
+  nav.innerHTML = buttons.map(b =>
+    `<button data-view="${b.id}">${b.label}</button>`
+  ).join('');
+  nav.querySelectorAll('button').forEach(btn => {
+    btn.onclick = () => switchView(btn.dataset.view);
+  });
+}
+
+function switchView(viewId) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  const view = document.getElementById('view-' + viewId);
+  if (view) view.classList.add('active');
+  const btn = document.querySelector(`nav button[data-view="${viewId}"]`);
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function renderDays() {
+  const main = document.querySelector('main');
+  days.forEach(day => {
+    const view = document.createElement('div');
+    view.className = 'view';
+    view.id = 'view-' + day.id;
+    view.innerHTML = `
+      <div class="day-header">
+        <div>
+          <h2>${day.title}</h2>
+          <div class="date">${day.date}</div>
+        </div>
+        <div class="city">${day.city}</div>
+      </div>
+      <div class="schedule-grid">
+        ${day.blocks.map(b => {
+          const slotClass = b.type === 'travel' ? 'activity-slot travel-block'
+                          : b.type === 'free' ? 'activity-slot free-block'
+                          : 'activity-slot';
+          const tags = (b.tags || []).map(t => `<span class="${t.type}">${t.text}</span>`).join('');
+          return `
+            <div class="time-slot">${b.time}</div>
+            <div class="${slotClass}">
+              <h4>${b.title}</h4>
+              ${b.location ? `<div class="location">${b.location}</div>` : ''}
+              <div class="details">${b.details}</div>
+              ${tags ? `<div>${tags}</div>` : ''}
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+    main.appendChild(view);
+  });
+}
+
+function renderTodos() {
+  const container = document.getElementById('todos-container');
+  const allItems = todoSections.flatMap(s => s.items);
+  const doneCount = allItems.filter(i => checks[i.id]).length;
+  const total = allItems.length;
+  const pct = total ? Math.round(100 * doneCount / total) : 0;
+
+  container.innerHTML = `
+    <div class="progress-wrapper">
+      <div class="progress-label">
+        <span>Overall progress</span>
+        <span>${doneCount} of ${total} done</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width: ${pct}%"></div></div>
+    </div>
+    ${todoSections.map(sec => `
+      <div class="todo-section ${sec.className}">
+        <h3>${sec.title}</h3>
+        <div class="todo-list">
+          ${sec.items.map(item => `
+            <label class="todo-item ${checks[item.id] ? 'done' : ''}">
+              <input type="checkbox" data-id="${item.id}" ${checks[item.id] ? 'checked' : ''}>
+              <div class="todo-item-content">
+                <div class="title">${item.title}</div>
+                <div class="desc">${item.desc}</div>
+              </div>
+            </label>
+          `).join('')}
+        </div>
+      </div>
+    `).join('')}
+  `;
+
+  container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.onchange = async (e) => {
+      const id = e.target.dataset.id;
+      checks[id] = e.target.checked;
+      await saveChecks(checks);
+      renderTodos();
+      renderOverviewProgress();
+    };
+  });
+}
+
+function renderOverviewProgress() {
+  const allItems = todoSections.flatMap(s => s.items);
+  const doneCount = allItems.filter(i => checks[i.id]).length;
+  const total = allItems.length;
+  const pct = total ? Math.round(100 * doneCount / total) : 0;
+  const el = document.getElementById('overview-progress');
+  if (!el) return;
+  el.innerHTML = `
+    <div class="progress-wrapper">
+      <div class="progress-label">
+        <span>Prep progress</span>
+        <span>${doneCount} of ${total} items done (${pct}%)</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width: ${pct}%"></div></div>
+    </div>
+  `;
+}
+
+// ========== INIT ==========
+(async function init() {
+  checks = await loadChecks();
+  renderNav();
+  renderDays();
+  renderTodos();
+  renderOverviewProgress();
+  switchView('overview');
+})();
+</script>
+</body>
+</html>
