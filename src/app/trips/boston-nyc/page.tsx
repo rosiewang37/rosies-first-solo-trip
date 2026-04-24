@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense, useEffect, useMemo, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
 import { days, todoSections } from '@/data/trip';
 import { Nav } from '@/components/Nav';
@@ -10,6 +11,8 @@ import { TodoList } from '@/components/TodoList';
 import { NowBar } from '@/components/NowBar';
 import { getChecks, setChecks as persistChecks } from '@/lib/storage';
 import { getNow, findActiveBlock } from '@/lib/clock';
+
+const MapsView = dynamic(() => import('@/components/MapsView'), { ssr: false });
 
 export default function BostonNYCPage() {
   return (
@@ -45,6 +48,7 @@ function BostonNYCInner() {
 
   const tabs = [
     { id: 'overview', label: 'Overview' },
+    { id: 'maps', label: 'Maps' },
     ...days.map((d) => ({ id: d.id, label: d.label })),
     { id: 'todos', label: 'To-do list' },
   ];
@@ -71,6 +75,7 @@ function BostonNYCInner() {
       ) : null}
       <main>
         {activeTab === 'overview' && <Overview doneCount={doneCount} total={allItems.length} />}
+        {activeTab === 'maps' && <MapsView days={days} checks={checks} />}
         {days.map((day) =>
           activeTab === day.id ? (
             <DayView

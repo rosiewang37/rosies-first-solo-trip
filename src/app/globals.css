@@ -481,6 +481,42 @@ main { max-width: 980px; margin: 0 auto; padding: 32px 24px; }
   font-weight: 700;
   box-shadow: inset 4px 0 0 0 var(--yellow);
 }
+/* Maps view */
+.maps-view { display: flex; flex-direction: column; gap: 20px; }
+.maps-empty {
+  background: var(--card);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  color: var(--text-soft);
+  font-size: 14px;
+  text-align: center;
+}
+.city-map {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(29, 53, 109, 0.04);
+}
+.city-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-soft);
+}
+.city-map-header h3 { font-size: 18px; font-weight: 500; color: var(--blue-dark); }
+.city-map-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-inter), sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+.map-wrap { height: 420px; width: 100%; }
+.leaflet-container { font-family: var(--font-inter), sans-serif; }
+
 /* Responsive */
 @media (max-width: 640px) {
   header { padding: 24px 20px; }
