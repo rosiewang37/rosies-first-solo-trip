@@ -8,7 +8,7 @@ Pure functions and thin localStorage wrappers. No React, no JSX, no external net
 |---|---|---|
 | `schedule.ts` | `parseTimeString`, `formatTime`, `computeBlockTimes`, `mapsUrl` | Time parsing for the schedule timeline. `mapsUrl(address)` returns a single-address Google Maps link. Always pass one address at a time, never a concatenated string. |
 | `clock.ts` | `getNow`, `findActiveBlock` | Real-time helper. `getNow(override)` reads the `?now=` query param if present, otherwise `new Date()`. `findActiveBlock` walks the days and returns which block is currently active based on `Day.startTime + Block.duration` math. |
-| `storage.ts` | `getChecks`, `setChecks`, `getActiveTab`, `setActiveTab` | LocalStorage wrappers. Checks (`trip-checks`) is `Record<string, boolean>`; active tab (`trip-active-tab`) is a single tab id so a refresh keeps the last view. All SSR-safe. |
+| `storage.ts` | `getChecks`, `setChecks`, `getActiveTab`, `setActiveTab`, `getExpanded`, `setExpanded` | LocalStorage wrappers. `trip-checks` is `Record<string, boolean>`; `trip-active-tab` is a single tab id so refresh keeps the last view; `trip-expanded` is `Record<string, boolean>` keyed by `block.id` so expand/collapse state persists. All SSR-safe. |
 | `customs.ts` | `getCustoms`, `setCustoms`, `CustomSpot` | LocalStorage wrapper keyed by `'trip-customs'` for user-added restaurants and optional stops. Each item is `{ id, name, parent }` where parent is a `block.id` or `${day.id}:opt`. |
 | `pins.ts` | `getCheckedPins` | Walks `days` and returns `Pin[]` for every checked-off location, restaurant, or optional visit. Consumed by `MapsView.tsx`. |
 

@@ -16,6 +16,8 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html, body { overflow-x: hidden; }
+
 body {
   font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: var(--bg);
@@ -113,11 +115,15 @@ main { max-width: 980px; margin: 0 auto; padding: 32px 24px; }
   background: var(--card-soft);
   border-right: 1px solid var(--border-soft);
   font-family: var(--font-inter), sans-serif;
+  min-width: 0;
 }
 .activity-slot {
   padding: 14px 16px;
   border-bottom: 1px solid var(--border-soft);
+  min-width: 0;
 }
+.activity-slot h4 { overflow-wrap: anywhere; }
+.activity-slot .details { overflow-wrap: anywhere; }
 .time-slot:last-of-type, .activity-slot:last-of-type { border-bottom: none; }
 .activity-slot h4 { font-size: 16px; font-weight: 500; color: var(--blue-dark); line-height: 1.35; }
 .activity-slot .details { font-size: 13px; color: var(--text-soft); line-height: 1.55; margin-bottom: 10px; }
@@ -187,10 +193,12 @@ main { max-width: 980px; margin: 0 auto; padding: 32px 24px; }
   text-decoration: underline;
   text-decoration-color: rgba(54, 123, 202, 0.4);
   text-underline-offset: 2px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 .sub-name:hover { text-decoration-color: var(--blue-bright); }
-.sub-address { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
-.sub-why { font-size: 12px; color: var(--text-soft); margin-top: 4px; line-height: 1.45; }
+.sub-address { font-size: 11px; color: var(--text-muted); margin-top: 1px; overflow-wrap: anywhere; }
+.sub-why { font-size: 12px; color: var(--text-soft); margin-top: 4px; line-height: 1.45; overflow-wrap: anywhere; }
 .sub-item.done .sub-name, .sub-item.done .sub-address, .sub-item.done .sub-why {
   color: var(--text-muted);
 }

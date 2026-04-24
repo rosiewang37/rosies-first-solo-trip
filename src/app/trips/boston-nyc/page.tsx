@@ -8,7 +8,14 @@ import { Nav } from '@/components/Nav';
 import { DayView } from '@/components/DayView';
 import { TodoList } from '@/components/TodoList';
 import { NowBar } from '@/components/NowBar';
-import { getChecks, setChecks as persistChecks, getActiveTab, setActiveTab as persistActiveTab } from '@/lib/storage';
+import {
+  getChecks,
+  setChecks as persistChecks,
+  getActiveTab,
+  setActiveTab as persistActiveTab,
+  getExpanded,
+  setExpanded as persistExpanded,
+} from '@/lib/storage';
 import { getCustoms, setCustoms as persistCustoms, type CustomSpot } from '@/lib/customs';
 import { getNow, findActiveBlock } from '@/lib/clock';
 
@@ -33,10 +40,12 @@ function BostonNYCInner() {
   const [hydrated, setHydrated] = useState(false);
   const [checks, setChecksState] = useState<Record<string, boolean>>({});
   const [customs, setCustomsState] = useState<CustomSpot[]>([]);
+  const [expanded, setExpandedState] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     setChecksState(getChecks());
     setCustomsState(getCustoms());
+    setExpandedState(getExpanded());
     const saved = getActiveTab();
     const validIds = new Set(['maps', 'todos', ...days.map((d) => d.id)]);
     if (saved && validIds.has(saved)) {
@@ -59,6 +68,13 @@ function BostonNYCInner() {
     const next = [...customs, { id, name, parent }];
     setCustomsState(next);
     persistCustoms(next);
+  };
+
+  const handleToggleExpand = (id: string) => {
+    const next = { ...expanded, [id]: !expanded[id] };
+    if (!next[id]) delete next[id];
+    setExpandedState(next);
+    persistExpanded(next);
   };
 
   const handleRemoveCustom = (id: string) => {
@@ -110,6 +126,8 @@ function BostonNYCInner() {
               customs={customs}
               onAddCustom={handleAddCustom}
               onRemoveCustom={handleRemoveCustom}
+              expanded={expanded}
+              onToggleExpand={handleToggleExpand}
             />
           ) : null
         )}
