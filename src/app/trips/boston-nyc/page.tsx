@@ -77,6 +77,8 @@ function BostonNYCInner() {
               key={day.id}
               day={day}
               activeBlockIndex={active && active.day.id === day.id ? active.blockIndex : null}
+              checks={checks}
+              onToggle={handleToggle}
             />
           ) : null
         )}

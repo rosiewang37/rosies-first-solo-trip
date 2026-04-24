@@ -16,14 +16,10 @@ export type Block = {
   details: string;
   type: 'normal' | 'travel' | 'free';
   tags: Tag[];
-  // Legacy single-string location. Still read by ScheduleBlock when `locations`
-  // and `eating` are both absent. Will be removed after Phase 4 lands.
-  location?: string;
-  // Discriminator for new rendering paths.
-  kind?: 'activity' | 'eat' | 'travel' | 'free';
-  // For activity and travel blocks: each place gets its own Google Maps link.
+  kind: 'activity' | 'eat' | 'travel' | 'free';
+  // activity + travel blocks: each place gets its own Google Maps link.
   locations?: Location[];
-  // For eating blocks: area label plus curated restaurant picks.
+  // eat blocks: area label plus curated restaurant picks.
   eating?: {
     area: string;
     areaCenter: { lat: number; lng: number };
