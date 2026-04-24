@@ -1,5 +1,6 @@
 const CHECKS_KEY = 'trip-checks';
 const ACTIVE_TAB_KEY = 'trip-active-tab';
+const EXPANDED_KEY = 'trip-expanded';
 
 export function getChecks(): Record<string, boolean> {
   if (typeof window === 'undefined') return {};
@@ -33,6 +34,25 @@ export function setActiveTab(id: string): void {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(ACTIVE_TAB_KEY, id);
+  } catch {
+    // quota exceeded or disabled; fail silently
+  }
+}
+
+export function getExpanded(): Record<string, boolean> {
+  if (typeof window === 'undefined') return {};
+  try {
+    const raw = localStorage.getItem(EXPANDED_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+export function setExpanded(expanded: Record<string, boolean>): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(EXPANDED_KEY, JSON.stringify(expanded));
   } catch {
     // quota exceeded or disabled; fail silently
   }

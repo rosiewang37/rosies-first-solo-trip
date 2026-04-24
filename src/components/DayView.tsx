@@ -12,6 +12,8 @@ export function DayView({
   customs,
   onAddCustom,
   onRemoveCustom,
+  expanded,
+  onToggleExpand,
 }: {
   day: Day;
   activeBlockIndex?: number | null;
@@ -20,6 +22,8 @@ export function DayView({
   customs: CustomSpot[];
   onAddCustom: (parent: string, name: string) => void;
   onRemoveCustom: (id: string) => void;
+  expanded: Record<string, boolean>;
+  onToggleExpand: (id: string) => void;
 }) {
   const times = computeBlockTimes(day);
   const optional = day.optionalVisits ?? [];
@@ -45,6 +49,8 @@ export function DayView({
             customs={customs}
             onAddCustom={onAddCustom}
             onRemoveCustom={onRemoveCustom}
+            expanded={!!expanded[block.id]}
+            onToggleExpand={() => onToggleExpand(block.id)}
           />
         ))}
       </div>

@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import type { Block, Location } from '@/data/trip';
 import type { CustomSpot } from '@/lib/customs';
 import { mapsUrl } from '@/lib/schedule';
@@ -15,6 +14,8 @@ export function ScheduleBlock({
   customs,
   onAddCustom,
   onRemoveCustom,
+  expanded,
+  onToggleExpand,
 }: {
   block: Block;
   time: string;
@@ -24,9 +25,9 @@ export function ScheduleBlock({
   customs: CustomSpot[];
   onAddCustom: (parent: string, name: string) => void;
   onRemoveCustom: (id: string) => void;
+  expanded: boolean;
+  onToggleExpand: () => void;
 }) {
-  const [expanded, setExpanded] = useState(false);
-
   const kind = block.kind;
   const baseClass =
     kind === 'travel'
@@ -46,7 +47,7 @@ export function ScheduleBlock({
         <button
           type="button"
           className="block-title-button"
-          onClick={() => setExpanded((v) => !v)}
+          onClick={onToggleExpand}
           aria-expanded={expanded}
         >
           <h4>
