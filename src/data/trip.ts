@@ -79,6 +79,150 @@ const AREA = {
   licWaterfront: { lat: 40.7450, lng: -73.9570 },
 };
 
+// Curated restaurant picks per area+meal. Researched from Eater, The Infatuation,
+// Time Out, and Bon Appetit. Each `why` is a 1-sentence reason; keep it short.
+const FOOD_PICKS: Record<string, Restaurant[]> = {
+  'north-end-dinner': [
+    { name: "Giacomo's Ristorante", address: '355 Hanover St, Boston, MA', lat: 42.3652, lng: -71.0542, why: 'Cash-only no-reservations institution famous for massive lobster ravioli and frutti di mare.' },
+    { name: 'Mamma Maria', address: '3 North Square, Boston, MA', lat: 42.3634, lng: -71.0541, why: "Eater Boston's top North End pick — white-tablecloth handmade pasta in a historic townhouse." },
+    { name: 'Bricco', address: '241 Hanover St, Boston, MA', lat: 42.3641, lng: -71.0549, why: 'Upscale house-made pasta locals recommend over the Hanover Street tourist crush.' },
+    { name: "Carmelina's", address: '307 Hanover St, Boston, MA', lat: 42.3647, lng: -71.0545, why: "Modern Sicilian; food writers call the short-rib gnocchi the neighborhood's best plate." },
+    { name: 'Antico Forno', address: '93 Salem St, Boston, MA', lat: 42.3644, lng: -71.0558, why: 'Wood-fired brick-oven pastas on quieter Salem Street, a longtime local favorite.' },
+  ],
+  'north-end-dessert': [
+    { name: "Mike's Pastry", address: '300 Hanover St, Boston, MA', lat: 42.3638, lng: -71.0546, why: 'Famous white-and-blue-box cannoli with the line out the door — tourist-heavy but the reference point.' },
+    { name: 'Modern Pastry', address: '257 Hanover St, Boston, MA', lat: 42.3635, lng: -71.0550, why: "Bostonians' counter-pick to Mike's; shells filled to order for a crisper bite." },
+    { name: "Bova's Bakery", address: '134 Salem St, Boston, MA', lat: 42.3650, lng: -71.0557, why: "24-hour family bakery; the sleeper pick when the Mike's-vs-Modern debate gets tired." },
+    { name: "Maria's Pastry Shop", address: '46 Cross St, Boston, MA', lat: 42.3633, lng: -71.0565, why: "Third-generation bakery; the pastry chef's pick for sfogliatelle and lobster tails." },
+  ],
+  'north-end-seafood': [
+    { name: 'Neptune Oyster', address: '63 Salem St, Boston, MA', lat: 42.3639, lng: -71.0562, why: "42-seat raw bar widely named Boston's best lobster roll (hot, buttered). Expect long waits." },
+    { name: 'Pauli\'s North End', address: '65 Salem St, Boston, MA', lat: 42.3639, lng: -71.0561, why: 'Next-door backup with a huge lobster roll and shorter line.' },
+    { name: 'Mare Oyster Bar', address: '3 Mechanic St, Boston, MA', lat: 42.3644, lng: -71.0540, why: 'Coastal Italian crudo and pastas, a quieter upscale option off Hanover.' },
+    { name: 'The Daily Catch', address: '323 Hanover St, Boston, MA', lat: 42.3649, lng: -71.0545, why: 'Cash-only, skillet-served Sicilian seafood in a 20-seat storefront — a Bon Appetit classic.' },
+  ],
+  'south-end-breakfast': [
+    { name: "Mike & Patty's", address: '12 Church St, Boston, MA', lat: 42.3498, lng: -71.0707, why: "Ten-seat shop Eater Boston repeatedly names the city's best egg sandwich." },
+    { name: 'Flour Bakery + Cafe', address: '1595 Washington St, Boston, MA', lat: 42.3397, lng: -71.0733, why: "Joanne Chang's flagship — the sticky buns are a Bon Appetit staple." },
+    { name: 'Render Coffee', address: '563 Columbus Ave, Boston, MA', lat: 42.3424, lng: -71.0793, why: 'Serious third-wave espresso with a breakfast menu, on every Boston coffee roundup.' },
+    { name: 'South End Buttery', address: '314 Shawmut Ave, Boston, MA', lat: 42.3427, lng: -71.0722, why: 'Neighborhood all-day cafe where residents actually eat — strong scones and egg sandwiches.' },
+    { name: 'Buttermilk & Bourbon', address: '160 Commonwealth Ave, Boston, MA', lat: 42.3513, lng: -71.0788, why: 'Jason Santos New Orleans-inspired brunch with beignets and chicken biscuits.' },
+  ],
+  'south-end-dinner': [
+    { name: 'Toro', address: '1704 Washington St, Boston, MA', lat: 42.3385, lng: -71.0744, why: 'Ken Oringer tapas — the grilled corn and uni bocadillo are Boston benchmarks.' },
+    { name: 'Coppa', address: '253 Shawmut Ave, Boston, MA', lat: 42.3423, lng: -71.0715, why: 'Enoteca from the same team, known for house-cured salumi and wood-fired pizzas.' },
+    { name: 'SRV', address: '569 Columbus Ave, Boston, MA', lat: 42.3425, lng: -71.0795, why: 'Venetian cicchetti and handmade pasta in a warm, loud room — a reliable local rec.' },
+    { name: 'B&G Oysters', address: '550 Tremont St, Boston, MA', lat: 42.3449, lng: -71.0709, why: "Barbara Lynch's oyster bar with a widely acclaimed lobster roll." },
+    { name: 'Mooncusser Fish House', address: '304 Stuart St, Boston, MA', lat: 42.3497, lng: -71.0700, why: 'Quietly excellent seasonal seafood tasting, a favorite among Boston chefs.' },
+  ],
+  'quincy-market-lunch': [
+    { name: 'Boston Chowda Co.', address: '4 S Market St, Boston, MA', lat: 42.3600, lng: -71.0555, why: 'The food-hall chowder stall everyone lines up for — tourist zone, but a credible bowl.' },
+    { name: 'Union Oyster House', address: '41 Union St, Boston, MA', lat: 42.3609, lng: -71.0573, why: "America's oldest continuously operating restaurant (1826) — historic more than cutting-edge." },
+    { name: 'Regina Pizzeria (Faneuil)', address: 'Faneuil Hall Marketplace, Boston, MA', lat: 42.3601, lng: -71.0560, why: 'Offshoot of the North End original — a quick brick-oven slice inside the market.' },
+    { name: 'The Black Rose', address: '160 State St, Boston, MA', lat: 42.3596, lng: -71.0560, why: 'Longstanding Irish pub across from Faneuil with fish and chips and live music.' },
+  ],
+  'back-bay-snack': [
+    { name: 'Tatte Bakery & Cafe', address: '70 Charles St, Boston, MA', lat: 42.3577, lng: -71.0702, why: "Tzurit Or's photogenic pastries and strong lattes — the shakshuka is an Eater staple." },
+    { name: 'Thinking Cup', address: '165 Tremont St, Boston, MA', lat: 42.3540, lng: -71.0637, why: 'Stumptown beans, careful pour-overs, and pastries near the Common.' },
+    { name: 'Gracenote Coffee', address: '108 Lincoln St, Boston, MA', lat: 42.3512, lng: -71.0561, why: "Tiny downtown roaster, repeatedly named Boston's best espresso by local food blogs." },
+    { name: 'Amorino Gelato', address: '227 Newbury St, Boston, MA', lat: 42.3497, lng: -71.0841, why: 'French-Italian gelato known for rose-petal-shaped cones, a Newbury Street staple.' },
+  ],
+  'harvard-square-lunch': [
+    { name: "Mr. Bartley's Burger Cottage", address: '1246 Massachusetts Ave, Cambridge, MA', lat: 42.3725, lng: -71.1184, why: 'Since 1960 — named-after-politicians burgers and frappes. The quintessential Harvard lunch.' },
+    { name: "Felipe's Taqueria", address: '21 Brattle St, Cambridge, MA', lat: 42.3733, lng: -71.1213, why: 'Rooftop taqueria — the default cheap, fast student lunch in the Square.' },
+    { name: 'Russell House Tavern', address: '14 JFK St, Cambridge, MA', lat: 42.3724, lng: -71.1212, why: 'Sit-down gastropub with a strong burger and oysters, a local go-to.' },
+    { name: 'Saloniki Greek', address: '20 Holyoke St, Cambridge, MA', lat: 42.3719, lng: -71.1189, why: "Jody Adams's fast-casual Greek pitas, a Boston Magazine favorite." },
+    { name: "Darwin's Ltd", address: '148 Mt Auburn St, Cambridge, MA', lat: 42.3721, lng: -71.1238, why: 'Sandwich shop locals have sworn by for decades; each sandwich named after a nearby street.' },
+  ],
+  'midtown-west-lunch': [
+    { name: 'The Halal Guys (original cart)', address: 'W 53rd St & 6th Ave, New York, NY', lat: 40.7617, lng: -73.9780, why: 'The original SW-corner cart — chicken and rice with white sauce that defined NYC halal carts.' },
+    { name: "Joe's Pizza (Times Square)", address: '1435 Broadway, New York, NY', lat: 40.7557, lng: -73.9860, why: "Greenwich Village classic's outpost — the default reliable NY slice near Port Authority." },
+    { name: 'Los Tacos No. 1 (Times Sq)', address: '229 W 43rd St, New York, NY', lat: 40.7574, lng: -73.9867, why: "Mesquite-grilled adobada and nopal tacos, consistently ranked NYC's best." },
+    { name: 'Totto Ramen', address: '366 W 52nd St, New York, NY', lat: 40.7640, lng: -73.9868, why: "Hell's Kitchen chicken-paitan ramen, a Time Out and Eater mainstay." },
+    { name: 'Burger Joint at Le Parker Meridien', address: '119 W 56th St, New York, NY', lat: 40.7647, lng: -73.9772, why: 'Hidden burger counter behind a curtain in a luxury hotel lobby — a beloved NYC in-joke.' },
+  ],
+  'grand-central-snack': [
+    { name: 'Grand Central Oyster Bar', address: '89 E 42nd St, Lower Level, New York, NY', lat: 40.7527, lng: -73.9772, why: 'Since 1913; the tiled-vault chowder and oyster pan roast are NYC institutions.' },
+    { name: 'Magnolia Bakery (Grand Central)', address: '89 E 42nd St, New York, NY', lat: 40.7527, lng: -73.9772, why: 'Quick banana pudding grab inside the terminal — an Eater-listed snack staple.' },
+    { name: 'Joe Coffee (Grand Central)', address: '89 E 42nd St, New York, NY', lat: 40.7527, lng: -73.9772, why: 'NYC-born specialty roaster with a counter inside Grand Central Market.' },
+    { name: "Murray's Cheese", address: 'Grand Central Market, New York, NY', lat: 40.7528, lng: -73.9772, why: "West Village cheesemonger's terminal stall for grilled cheese and a plate to go." },
+  ],
+  'rockefeller-dinner': [
+    { name: 'Le Rock', address: '45 Rockefeller Plaza, New York, NY', lat: 40.7590, lng: -73.9785, why: "Frenchette team's art deco brasserie — the best Rockefeller Center dinner per Eater and NYT." },
+    { name: 'Jupiter', address: '30 Rockefeller Plaza, New York, NY', lat: 40.7586, lng: -73.9788, why: 'Missy Robbins pasta-bar concept, an Eater NY essential.' },
+    { name: 'Avra Rockefeller Center', address: '1 Rockefeller Plaza, New York, NY', lat: 40.7591, lng: -73.9784, why: 'Whole-grilled Mediterranean fish in a dramatic room, a frequent Infatuation special-occasion pick.' },
+    { name: 'Pebble Bar', address: '67 W 49th St, New York, NY', lat: 40.7588, lng: -73.9798, why: "Three-floor drinks-and-snacks bar in a townhouse at Rock Center's edge — locals, not tourists." },
+    { name: 'The Sea Grill', address: '19 W 49th St, New York, NY', lat: 40.7587, lng: -73.9790, why: 'Rink-side seafood with skating views — the canonical Rockefeller dinner experience.' },
+  ],
+  'fidi-breakfast': [
+    { name: "Leo's Bagels", address: '3 Hanover Square, New York, NY', lat: 40.7046, lng: -74.0107, why: "Hand-rolled kettle-boiled bagels consistently named among NYC's best." },
+    { name: 'Black Fox Coffee Co.', address: '70 Pine St, New York, NY', lat: 40.7065, lng: -74.0075, why: 'Polished specialty cafe with strong espresso and avo toast, a FiDi favorite.' },
+    { name: 'Brookfield Place (Hudson Eats)', address: '230 Vesey St, New York, NY', lat: 40.7127, lng: -74.0157, why: 'Waterfront food hall with Black Seed Bagels and Blue Ribbon Sushi for a fast bite.' },
+    { name: "Luke's Lobster FiDi", address: '26 S William St, New York, NY', lat: 40.7047, lng: -74.0106, why: 'Maine-style lobster roll counter, a reliable quick breakfast-to-lunch pivot.' },
+  ],
+  'stone-street-lunch': [
+    { name: "Adrienne's Pizzabar", address: '54 Stone St, New York, NY', lat: 40.7042, lng: -74.0108, why: 'Rectangular old-fashioned pies on the cobblestones — the signature Stone Street lunch.' },
+    { name: "Ulysses' Folk House", address: '95 Pearl St, New York, NY', lat: 40.7044, lng: -74.0101, why: 'Sprawling Irish pub anchoring the pedestrian block — a FiDi classic for fish and chips.' },
+    { name: "Harry's NYC", address: '1 Hanover Square, New York, NY', lat: 40.7047, lng: -74.0105, why: 'Historic India House steakhouse lunch — a Wall Street institution since 1972.' },
+    { name: 'Fraunces Tavern', address: '54 Pearl St, New York, NY', lat: 40.7035, lng: -74.0115, why: '1762 tavern where Washington said farewell to his officers — still serving lunch.' },
+  ],
+  'dumbo-dinner': [
+    { name: "Juliana's Pizza", address: '19 Old Fulton St, Brooklyn, NY', lat: 40.7028, lng: -73.9934, why: "Patsy Grimaldi's return — coal-oven Margheritas that Eater and Pete Wells rate above neighboring Grimaldi's." },
+    { name: 'Time Out Market New York', address: '55 Water St, Brooklyn, NY', lat: 40.7027, lng: -73.9899, why: "Rooftop food hall curated by Time Out with Jacob's Pickles, Fornino, and Pat LaFrieda." },
+    { name: 'Cecconi\'s Dumbo', address: '55 Water St, Brooklyn, NY', lat: 40.7028, lng: -73.9898, why: 'Soho House Italian with a Manhattan-skyline patio — a frequent Infatuation date-night pick.' },
+    { name: 'Westville DUMBO', address: '81 Washington St, Brooklyn, NY', lat: 40.7033, lng: -73.9898, why: 'The market-vegetable-plate classic with a DUMBO outpost — reliable weeknight dinner.' },
+    { name: 'The River Cafe', address: '1 Water St, Brooklyn, NY', lat: 40.7034, lng: -73.9962, why: 'Under the Brooklyn Bridge — the special-occasion dinner NYT has reviewed four stars across eras.' },
+  ],
+  'midtown-breakfast': [
+    { name: 'Ess-a-Bagel', address: '831 3rd Ave, New York, NY', lat: 40.7564, lng: -73.9702, why: 'Fist-sized hand-rolled bagels with scallion cream cheese — a perennial NYC top-3.' },
+    { name: 'Bluestone Lane (Bryant Park)', address: '1085 6th Ave, New York, NY', lat: 40.7539, lng: -73.9834, why: 'Australian-style avo toast and flat whites, a staple Midtown morning stop.' },
+    { name: 'Blue Bottle Coffee (Bryant Park)', address: '54 W 40th St, New York, NY', lat: 40.7533, lng: -73.9834, why: 'Oakland import that defined third-wave in NYC — good for a quick Midtown latte.' },
+    { name: 'Tompkins Square Bagels', address: '165 Ave A, New York, NY', lat: 40.7266, lng: -73.9824, why: "Cult East Village bagel shop — top-5 NYC pick on Infatuation's bagel list." },
+  ],
+  'midtown-moma-lunch': [
+    { name: 'Cafe 2 at MoMA', address: '11 W 53rd St, 2nd Floor, New York, NY', lat: 40.7614, lng: -73.9776, why: 'Casual Italian counter inside MoMA by the Modern team — a quick in-museum lunch.' },
+    { name: 'The Modern (Bar Room)', address: '9 W 53rd St, New York, NY', lat: 40.7614, lng: -73.9776, why: "Danny Meyer's two-Michelin-star restaurant inside MoMA's sculpture garden — the canonical MoMA lunch." },
+    { name: 'La Grande Boucherie', address: '145 W 53rd St, New York, NY', lat: 40.7614, lng: -73.9800, why: 'Belle Epoque brasserie a block from MoMA with a glass-covered patio.' },
+    { name: 'Aldo Sohm Wine Bar', address: '151 W 51st St, New York, NY', lat: 40.7611, lng: -73.9805, why: "Le Bernardin's wine bar offshoot — a short walk south for charcuterie and glass pours." },
+    { name: 'Sushi of Gari 46', address: '347 W 46th St, New York, NY', lat: 40.7603, lng: -73.9899, why: "Chef Gari Sugio's omakase-style sushi at a quick lunch price — a longtime local pick." },
+  ],
+  'theater-district-dinner': [
+    { name: 'Joe Allen', address: '326 W 46th St, New York, NY', lat: 40.7604, lng: -73.9890, why: 'Restaurant Row classic since 1965 — Broadway-poster-covered walls are the theater-district photo.' },
+    { name: 'Orso', address: '322 W 46th St, New York, NY', lat: 40.7604, lng: -73.9888, why: 'Next-door Italian sibling of Joe Allen — a go-to pre-show Broadway dinner.' },
+    { name: 'Becco', address: '355 W 46th St, New York, NY', lat: 40.7604, lng: -73.9898, why: "Lidia Bastianich's Restaurant Row mainstay — the unlimited pasta prix fixe is a theater ritual." },
+    { name: 'Bond 45', address: '221 W 46th St, New York, NY', lat: 40.7593, lng: -73.9862, why: 'Italian-American Shelly Fireman joint — reliable pastas and steaks with a pre-show rhythm.' },
+    { name: "Sardi's", address: '234 W 44th St, New York, NY', lat: 40.7582, lng: -73.9878, why: 'Since 1927 — caricature-lined walls and continental classics, historic more than cutting-edge.' },
+  ],
+  'chelsea-breakfast': [
+    { name: 'Bluestone Lane Chelsea', address: '55 9th Ave, New York, NY', lat: 40.7423, lng: -74.0043, why: 'Chelsea Market-adjacent Australian cafe for flat whites and smashed avo.' },
+    { name: 'Cookshop', address: '156 10th Ave, New York, NY', lat: 40.7445, lng: -74.0052, why: 'Farm-to-table brunch across from the High Line — Eater 38 for years running.' },
+    { name: 'The Smith (Chelsea)', address: '10 W 20th St, New York, NY', lat: 40.7401, lng: -73.9926, why: 'Reliable all-day American brasserie — a Chelsea brunch default.' },
+    { name: 'Joe Coffee (Chelsea)', address: '405 W 23rd St, New York, NY', lat: 40.7466, lng: -74.0023, why: 'NYC specialty roaster with a dependable Chelsea location for a quick start.' },
+    { name: 'Cafe Cluny', address: '284 W 12th St, New York, NY', lat: 40.7359, lng: -74.0049, why: 'All-day French bistro at the West Village edge — a top brunch Infatuation regularly flags.' },
+  ],
+  'chelsea-market-lunch': [
+    { name: 'Los Tacos No. 1', address: '75 9th Ave, New York, NY', lat: 40.7425, lng: -74.0062, why: "Mesquite-grilled adobada and carne asada — almost every NYC taco list's #1." },
+    { name: 'Miznon', address: '75 9th Ave, New York, NY', lat: 40.7425, lng: -74.0062, why: "Eyal Shani's Israeli pita spot — the whole-roasted cauliflower is the signature." },
+    { name: 'Mokbar', address: '75 9th Ave, New York, NY', lat: 40.7425, lng: -74.0062, why: 'Korean-inflected ramen from chef Esther Choi — a Chelsea Market standout.' },
+    { name: 'Very Fresh Noodles', address: '75 9th Ave, New York, NY', lat: 40.7425, lng: -74.0062, why: "Hand-pulled biangbiang noodles — one of the market's cult favorites." },
+    { name: 'Seed + Mill', address: '75 9th Ave, New York, NY', lat: 40.7425, lng: -74.0062, why: "Halva and tahini soft-serve — the market's signature dessert stall." },
+    { name: 'The Lobster Place', address: '75 9th Ave, New York, NY', lat: 40.7425, lng: -74.0062, why: 'Fish counter and raw bar with lobster rolls and sushi — an old-school Chelsea Market anchor.' },
+  ],
+  'greenwich-village-coffee': [
+    { name: 'Caffe Reggio', address: '119 MacDougal St, New York, NY', lat: 40.7299, lng: -74.0009, why: 'Since 1927; claims the first cappuccino in America — a pristine Village time capsule.' },
+    { name: 'Dante NYC', address: '79-81 MacDougal St, New York, NY', lat: 40.7294, lng: -74.0013, why: "Century-old cafe reborn as World's 50 Best Bars — daytime espresso, evening negroni sbagliato." },
+    { name: 'Joe Coffee (Waverly)', address: '141 Waverly Pl, New York, NY', lat: 40.7336, lng: -74.0024, why: "NYC-born roaster's original shop — a Village regulars' counter." },
+    { name: 'Partners Coffee West Village', address: '44 W 8th St, New York, NY', lat: 40.7320, lng: -73.9997, why: "Brooklyn roaster's Village outpost — a Time Out specialty-coffee pick." },
+  ],
+  'lic': [
+    { name: 'Sweetleaf Coffee', address: '10-93 Jackson Ave, Long Island City, NY', lat: 40.7434, lng: -73.9540, why: "LIC's pioneering specialty roaster — the neighborhood's morning anchor." },
+    { name: 'Levante LIC', address: '10-93 Jackson Ave, Long Island City, NY', lat: 40.7434, lng: -73.9540, why: 'All-day Italian cafe and bakery — a frequent Eater Queens pick for brunch.' },
+    { name: 'Bread Brothers Bagel Cafe', address: '10-50 50th Ave, Long Island City, NY', lat: 40.7418, lng: -73.9570, why: "LIC bagel shop locals recommend when they don't want to cross the river." },
+    { name: 'Casa Enrique', address: '5-48 49th Ave, Long Island City, NY', lat: 40.7430, lng: -73.9570, why: 'Michelin-starred Mexican by chef Cosme Aguilar — the LIC sit-down standout.' },
+    { name: 'Hunters Point Park Cafe', address: '47-02 Center Blvd, Long Island City, NY', lat: 40.7448, lng: -73.9586, why: 'Waterfront seating with the Manhattan skyline view that defines an LIC visit.' },
+  ],
+};
+
 export const days: Day[] = [
   {
     id: 'day1',
@@ -126,7 +270,7 @@ export const days: Day[] = [
         title: 'Dinner',
         details: 'Little Italy. Pick based on vibe: casual pizza, sit-down pasta, or seafood splurge.',
         type: 'normal',
-        eating: { area: 'North End', areaCenter: AREA.northEnd, picks: [] },
+        eating: { area: 'North End', areaCenter: AREA.northEnd, picks: FOOD_PICKS['north-end-dinner'] },
         tags: [{ type: 'cost', text: '$25-90' }],
       },
       {
@@ -136,7 +280,7 @@ export const days: Day[] = [
         title: 'Dessert stroll',
         details: 'Cannoli. Bova\'s is 24 hours and beloved by locals. Modern vs Mike\'s is the classic debate.',
         type: 'normal',
-        eating: { area: 'North End (dessert)', areaCenter: AREA.northEnd, picks: [] },
+        eating: { area: 'North End (dessert)', areaCenter: AREA.northEnd, picks: FOOD_PICKS['north-end-dessert'] },
         tags: [{ type: 'cost', text: '$6-10' }],
       },
       {
@@ -172,7 +316,7 @@ export const days: Day[] = [
         title: 'Breakfast & coffee',
         details: 'Cafes near The Smith. Grab and go.',
         type: 'normal',
-        eating: { area: 'South End', areaCenter: AREA.southEnd, picks: [] },
+        eating: { area: 'South End', areaCenter: AREA.southEnd, picks: FOOD_PICKS['south-end-breakfast'] },
         tags: [{ type: 'cost', text: '$10-15' }],
       },
       {
@@ -222,7 +366,7 @@ export const days: Day[] = [
         title: 'Lunch',
         details: 'Food hall at Quincy Market, or chowder nearby.',
         type: 'normal',
-        eating: { area: 'Quincy Market / Faneuil Hall', areaCenter: AREA.quincyMarket, picks: [] },
+        eating: { area: 'Quincy Market / Faneuil Hall', areaCenter: AREA.quincyMarket, picks: FOOD_PICKS['quincy-market-lunch'] },
         tags: [{ type: 'cost', text: '$20-35' }],
       },
       {
@@ -260,7 +404,7 @@ export const days: Day[] = [
         title: 'Coffee / gelato break',
         details: 'Sit down, recharge before dinner.',
         type: 'normal',
-        eating: { area: 'Back Bay / Downtown', areaCenter: AREA.downtownBoston, picks: [] },
+        eating: { area: 'Back Bay / Downtown', areaCenter: AREA.downtownBoston, picks: FOOD_PICKS['back-bay-snack'] },
         tags: [{ type: 'cost', text: '$8-12' }],
       },
       {
@@ -270,7 +414,7 @@ export const days: Day[] = [
         title: 'Seafood dinner',
         details: 'North End or downtown. Neptune Oyster is worth the line if you have patience.',
         type: 'normal',
-        eating: { area: 'North End (seafood)', areaCenter: AREA.northEnd, picks: [] },
+        eating: { area: 'North End (seafood)', areaCenter: AREA.northEnd, picks: FOOD_PICKS['north-end-seafood'] },
         tags: [{ type: 'cost', text: '$40-80' }],
       },
       {
@@ -306,7 +450,7 @@ export const days: Day[] = [
         title: 'Breakfast & coffee',
         details: 'South End cafes near The Smith.',
         type: 'normal',
-        eating: { area: 'South End', areaCenter: AREA.southEnd, picks: [] },
+        eating: { area: 'South End', areaCenter: AREA.southEnd, picks: FOOD_PICKS['south-end-breakfast'] },
         tags: [{ type: 'cost', text: '$10-15' }],
       },
       {
@@ -350,7 +494,7 @@ export const days: Day[] = [
         title: 'Lunch',
         details: 'Harvard Square. Student classics everywhere.',
         type: 'normal',
-        eating: { area: 'Harvard Square', areaCenter: AREA.harvardSquare, picks: [] },
+        eating: { area: 'Harvard Square', areaCenter: AREA.harvardSquare, picks: FOOD_PICKS['harvard-square-lunch'] },
         tags: [{ type: 'cost', text: '$12-25' }],
       },
       {
@@ -401,7 +545,7 @@ export const days: Day[] = [
         title: 'Coffee & snack',
         details: 'Newbury Street or Back Bay cafes.',
         type: 'normal',
-        eating: { area: 'Back Bay / Newbury', areaCenter: AREA.backBay, picks: [] },
+        eating: { area: 'Back Bay / Newbury', areaCenter: AREA.backBay, picks: FOOD_PICKS['back-bay-snack'] },
         tags: [{ type: 'cost', text: '$6-10' }],
       },
       {
@@ -426,7 +570,7 @@ export const days: Day[] = [
         title: 'Dinner',
         details: 'Casual spot in the South End or Back Bay.',
         type: 'normal',
-        eating: { area: 'South End / Back Bay', areaCenter: AREA.southEnd, picks: [] },
+        eating: { area: 'South End / Back Bay', areaCenter: AREA.southEnd, picks: FOOD_PICKS['south-end-dinner'] },
         tags: [{ type: 'cost', text: '$30-65' }],
       },
     ],
@@ -463,7 +607,7 @@ export const days: Day[] = [
         title: 'Breakfast to-go',
         details: 'Grab something near The Smith before walking to South Station.',
         type: 'normal',
-        eating: { area: 'South End (to-go)', areaCenter: AREA.southEnd, picks: [] },
+        eating: { area: 'South End (to-go)', areaCenter: AREA.southEnd, picks: FOOD_PICKS['south-end-breakfast'] },
         tags: [{ type: 'cost', text: '$8-12' }],
       },
       {
@@ -509,7 +653,7 @@ export const days: Day[] = [
         title: 'Lunch',
         details: 'Midtown West. Halal Guys, Joe\'s Pizza, or a quick sit-down.',
         type: 'normal',
-        eating: { area: 'Midtown West', areaCenter: AREA.midtownWest, picks: [] },
+        eating: { area: 'Midtown West', areaCenter: AREA.midtownWest, picks: FOOD_PICKS['midtown-west-lunch'] },
         tags: [{ type: 'cost', text: '$15-25 CAD' }],
       },
       {
@@ -545,7 +689,7 @@ export const days: Day[] = [
         title: 'Coffee & snack',
         details: 'Grand Central Market downstairs is a solid food hall.',
         type: 'normal',
-        eating: { area: 'Grand Central', areaCenter: AREA.grandCentralArea, picks: [] },
+        eating: { area: 'Grand Central', areaCenter: AREA.grandCentralArea, picks: FOOD_PICKS['grand-central-snack'] },
         tags: [{ type: 'cost', text: '$8-15 CAD' }],
       },
       {
@@ -568,7 +712,7 @@ export const days: Day[] = [
         title: 'Dinner',
         details: 'Rockefeller area before Top of the Rock.',
         type: 'normal',
-        eating: { area: 'Rockefeller area', areaCenter: AREA.rockefellerArea, picks: [] },
+        eating: { area: 'Rockefeller area', areaCenter: AREA.rockefellerArea, picks: FOOD_PICKS['rockefeller-dinner'] },
         tags: [{ type: 'cost', text: '$25-40 CAD' }],
       },
       {
@@ -631,7 +775,7 @@ export const days: Day[] = [
         title: 'Breakfast',
         details: 'Quick bite near Battery Park before ferry.',
         type: 'normal',
-        eating: { area: 'FiDi / Battery Park', areaCenter: AREA.fidi, picks: [] },
+        eating: { area: 'FiDi / Battery Park', areaCenter: AREA.fidi, picks: FOOD_PICKS['fidi-breakfast'] },
         tags: [{ type: 'cost', text: '$8-15 CAD' }],
       },
       {
@@ -686,7 +830,7 @@ export const days: Day[] = [
         title: 'Lunch',
         details: 'Stone Street historic pedestrian strip, or Eataly.',
         type: 'normal',
-        eating: { area: 'Stone Street / FiDi', areaCenter: AREA.stoneStreet, picks: [] },
+        eating: { area: 'Stone Street / FiDi', areaCenter: AREA.stoneStreet, picks: FOOD_PICKS['stone-street-lunch'] },
         tags: [{ type: 'cost', text: '$25-45 CAD' }],
       },
       {
@@ -760,7 +904,7 @@ export const days: Day[] = [
         title: 'Dinner',
         details: 'DUMBO pizza classics, or the Time Out Market food hall.',
         type: 'normal',
-        eating: { area: 'DUMBO', areaCenter: AREA.dumbo, picks: [] },
+        eating: { area: 'DUMBO', areaCenter: AREA.dumbo, picks: FOOD_PICKS['dumbo-dinner'] },
         tags: [{ type: 'cost', text: '$20-40 CAD' }],
       },
       {
@@ -831,7 +975,7 @@ export const days: Day[] = [
         title: 'Breakfast',
         details: 'Bagel, pret, or coffee in Midtown.',
         type: 'normal',
-        eating: { area: 'Midtown', areaCenter: AREA.midtownWest, picks: [] },
+        eating: { area: 'Midtown', areaCenter: AREA.midtownWest, picks: FOOD_PICKS['midtown-breakfast'] },
         tags: [{ type: 'cost', text: '$10-18 CAD' }],
       },
       {
@@ -853,7 +997,7 @@ export const days: Day[] = [
         title: 'Lunch',
         details: 'Midtown near MoMA.',
         type: 'normal',
-        eating: { area: 'Midtown (near MoMA)', areaCenter: { lat: 40.7614, lng: -73.9776 }, picks: [] },
+        eating: { area: 'Midtown (near MoMA)', areaCenter: { lat: 40.7614, lng: -73.9776 }, picks: FOOD_PICKS['midtown-moma-lunch'] },
         tags: [{ type: 'cost', text: '$18-30 CAD' }],
       },
       {
@@ -881,7 +1025,7 @@ export const days: Day[] = [
         title: 'Pre-show dinner',
         details: 'Quick bite in the theater district.',
         type: 'normal',
-        eating: { area: 'Theater District', areaCenter: AREA.theaterDistrict, picks: [] },
+        eating: { area: 'Theater District', areaCenter: AREA.theaterDistrict, picks: FOOD_PICKS['theater-district-dinner'] },
         tags: [{ type: 'cost', text: '$15-25 CAD' }],
       },
       {
@@ -948,7 +1092,7 @@ export const days: Day[] = [
         title: 'Breakfast',
         details: 'Chelsea cafes, or inside Chelsea Market.',
         type: 'normal',
-        eating: { area: 'Chelsea', areaCenter: AREA.chelsea, picks: [] },
+        eating: { area: 'Chelsea', areaCenter: AREA.chelsea, picks: FOOD_PICKS['chelsea-breakfast'] },
         tags: [{ type: 'cost', text: '$10-18 CAD' }],
       },
       {
@@ -971,7 +1115,7 @@ export const days: Day[] = [
         title: 'Lunch at Chelsea Market',
         details: 'Food stalls mid-High Line.',
         type: 'normal',
-        eating: { area: 'Chelsea Market', areaCenter: AREA.chelseaMarket, picks: [] },
+        eating: { area: 'Chelsea Market', areaCenter: AREA.chelseaMarket, picks: FOOD_PICKS['chelsea-market-lunch'] },
         tags: [{ type: 'cost', text: '$18-35 CAD' }],
       },
       {
@@ -1006,7 +1150,7 @@ export const days: Day[] = [
         title: 'Coffee stop',
         details: 'Historic Village cafes.',
         type: 'normal',
-        eating: { area: 'Greenwich Village', areaCenter: AREA.greenwichVillage, picks: [] },
+        eating: { area: 'Greenwich Village', areaCenter: AREA.greenwichVillage, picks: FOOD_PICKS['greenwich-village-coffee'] },
         tags: [{ type: 'cost', text: '$6-10 CAD' }],
       },
       {
@@ -1113,7 +1257,7 @@ export const days: Day[] = [
         title: 'Breakfast in LIC',
         details: 'Local cafes on the way out the door.',
         type: 'normal',
-        eating: { area: 'LIC', areaCenter: AREA.licWaterfront, picks: [] },
+        eating: { area: 'LIC', areaCenter: AREA.licWaterfront, picks: FOOD_PICKS['lic'] },
         tags: [{ type: 'cost', text: '$10-15 CAD' }],
       },
       {
@@ -1135,7 +1279,7 @@ export const days: Day[] = [
         title: 'Brunch',
         details: 'LIC waterfront, or a Manhattan classic if you want one last trip across the river.',
         type: 'normal',
-        eating: { area: 'LIC (brunch)', areaCenter: AREA.licWaterfront, picks: [] },
+        eating: { area: 'LIC (brunch)', areaCenter: AREA.licWaterfront, picks: FOOD_PICKS['lic'] },
         tags: [{ type: 'cost', text: '$25-40 CAD' }],
       },
       {
@@ -1154,7 +1298,7 @@ export const days: Day[] = [
         title: 'Grab-and-go lunch',
         details: 'Light. Nothing heavy before a flight.',
         type: 'normal',
-        eating: { area: 'LIC (to-go)', areaCenter: AREA.licWaterfront, picks: [] },
+        eating: { area: 'LIC (to-go)', areaCenter: AREA.licWaterfront, picks: FOOD_PICKS['lic'] },
         tags: [{ type: 'cost', text: '$10-15 CAD' }],
       },
       {
