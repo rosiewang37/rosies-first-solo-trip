@@ -1,13 +1,34 @@
 export type Tag = { type: 'cost' | 'transit' | 'tip'; text: string };
 
+export type Location = {
+  name: string;
+  address: string;
+  lat: number;
+  lng: number;
+};
+
+export type Restaurant = Location & { why: string };
+
 export type Block = {
   id: string;
   duration: number;
   title: string;
-  location?: string;
   details: string;
   type: 'normal' | 'travel' | 'free';
   tags: Tag[];
+  // Legacy single-string location. Being phased out in favour of `locations`.
+  // Still read by ScheduleBlock when `locations` is absent.
+  location?: string;
+  // New discriminator. When omitted, block is treated as legacy `type`.
+  kind?: 'activity' | 'eat' | 'travel' | 'free';
+  // For activity / travel blocks: each place gets its own Google Maps link.
+  locations?: Location[];
+  // For eating blocks: area label + curated restaurant picks.
+  eating?: {
+    area: string;
+    areaCenter: { lat: number; lng: number };
+    picks: Restaurant[];
+  };
 };
 
 export type Recommendation = {
@@ -29,6 +50,7 @@ export type Day = {
   startTime: string;
   blocks: Block[];
   recommendations: Recommendation[];
+  optionalVisits?: Location[];
 };
 
 export type TodoItem = { id: string; title: string; desc: string };
