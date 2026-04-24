@@ -237,7 +237,7 @@ export const days: Day[] = [
         details: '8-9 hour drive. Pack snacks, download offline maps, queue up podcasts.',
         type: 'travel',
         locations: [
-          { name: 'The Smith (South End)', address: '99 E Dedham St, Boston, MA', lat: 42.3398, lng: -71.0743 },
+          { name: 'The Smith (South End)', address: 'Building 99, 99 E Dedham St, Boston, MA', lat: 42.3398, lng: -71.0743 },
         ],
         tags: [{ type: 'transit', text: '8-9 hrs by car' }],
       },
@@ -249,7 +249,7 @@ export const days: Day[] = [
         details: 'Drop your backpack, meet your host, settle in.',
         type: 'normal',
         locations: [
-          { name: 'The Smith (South End)', address: '99 E Dedham St, Boston, MA', lat: 42.3398, lng: -71.0743 },
+          { name: 'The Smith (South End)', address: 'Building 99, 99 E Dedham St, Boston, MA', lat: 42.3398, lng: -71.0743 },
         ],
         tags: [],
       },
@@ -293,7 +293,7 @@ export const days: Day[] = [
         details: 'Quick walk back, early sleep before a big day tomorrow.',
         type: 'travel',
         locations: [
-          { name: 'The Smith (South End)', address: '99 E Dedham St, Boston, MA', lat: 42.3398, lng: -71.0743 },
+          { name: 'The Smith (South End)', address: 'Building 99, 99 E Dedham St, Boston, MA', lat: 42.3398, lng: -71.0743 },
         ],
         tags: [{ type: 'transit', text: '20 min walk' }],
       },
@@ -436,7 +436,7 @@ export const days: Day[] = [
         details: 'T or Uber. Long day, good sleep ahead.',
         type: 'travel',
         locations: [
-          { name: 'The Smith (South End)', address: '99 E Dedham St, Boston, MA', lat: 42.3398, lng: -71.0743 },
+          { name: 'The Smith (South End)', address: 'Building 99, 99 E Dedham St, Boston, MA', lat: 42.3398, lng: -71.0743 },
         ],
         tags: [{ type: 'transit', text: 'T or Uber' }],
       },
