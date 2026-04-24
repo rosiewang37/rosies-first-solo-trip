@@ -7,9 +7,8 @@ Stateless (or near-stateless) UI. Components take props, render DOM. They don't 
 | File | What it renders |
 |---|---|
 | `Nav.tsx` | Tab bar across the top |
-| `Overview.tsx` | Trip summary + overall todo progress on the Overview tab |
 | `DayView.tsx` | One day's schedule: blocks stacked vertically plus the optional-visits section |
-| `ScheduleBlock.tsx` | A single time-block. Collapsed by default on mobile; expand to see sub-locations or restaurant picks with per-place Google Maps links and sub-checkboxes. Handles all `Block.kind` variants. |
+| `ScheduleBlock.tsx` | A single time-block. Collapsed by default; expand to see sub-locations or restaurant picks with per-place Google Maps links and sub-checkboxes. Handles all `Block.kind` variants. |
 | `NowBar.tsx` | Live "Now / Next" indicator shown on the active day |
 | `ProgressBar.tsx` | Todo-list progress bar |
 | `TodoList.tsx` | Pre-trip / day-of / packing checklist tab |
@@ -17,7 +16,7 @@ Stateless (or near-stateless) UI. Components take props, render DOM. They don't 
 
 ## Patterns
 - Receive state as props (`checks: Record<string, boolean>`), emit changes via callbacks (`onToggle(id, checked)`). The page owns the state.
-- Each block's main checkbox uses `block.id`. Sub-items (a location inside an activity, a restaurant inside an eat block, an optional visit) use `${block.id}:${sub.address}` or `${day.id}:opt:${addr}`. Keep the convention consistent so `src/lib/pins.ts` can aggregate correctly.
+- Sub-items (a location inside an activity, a restaurant inside an eat block, an optional visit) use `${block.id}:${sub.address}` or `${day.id}:opt:${addr}`. Keep the convention consistent so `src/lib/pins.ts` can aggregate correctly.
 - Expand/collapse state for a block is local (`useState`), not persisted. Check state is persisted.
 
 ## Anti-patterns

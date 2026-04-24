@@ -29,34 +29,23 @@ export function ScheduleBlock({
   const slotClass = [baseClass, isNow ? 'is-now' : '', expanded ? 'is-expanded' : ''].filter(Boolean).join(' ');
   const timeClass = isNow ? 'time-slot is-now' : 'time-slot';
 
-  const checked = !!checks[block.id];
   const subs = kind === 'eat' ? block.eating?.picks ?? [] : block.locations ?? [];
 
   return (
     <>
       <div className={timeClass}>{time}</div>
       <div className={slotClass}>
-        <div className="block-header">
-          <label className="block-check" onClick={(e) => e.stopPropagation()}>
-            <input
-              type="checkbox"
-              checked={checked}
-              onChange={(e) => onToggle(block.id, e.target.checked)}
-              aria-label={`Mark ${block.title} done`}
-            />
-          </label>
-          <button
-            type="button"
-            className="block-title-button"
-            onClick={() => setExpanded((v) => !v)}
-            aria-expanded={expanded}
-          >
-            <h4>
-              {kind === 'eat' && block.eating ? `${block.title} · ${block.eating.area}` : block.title}
-            </h4>
-            <span className={`caret ${expanded ? 'open' : ''}`} aria-hidden="true">▸</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          className="block-title-button"
+          onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
+        >
+          <h4>
+            {kind === 'eat' && block.eating ? `${block.title} · ${block.eating.area}` : block.title}
+          </h4>
+          <span className={`caret ${expanded ? 'open' : ''}`} aria-hidden="true">▸</span>
+        </button>
 
         {expanded ? (
           <div className="block-body">

@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
 import { days, todoSections } from '@/data/trip';
 import { Nav } from '@/components/Nav';
-import { Overview } from '@/components/Overview';
 import { DayView } from '@/components/DayView';
 import { TodoList } from '@/components/TodoList';
 import { NowBar } from '@/components/NowBar';
@@ -29,7 +28,7 @@ function BostonNYCInner() {
   const now = useMemo(() => getNow(nowOverride), [nowOverride]);
   const active = useMemo(() => findActiveBlock(days, now), [now]);
 
-  const [activeTab, setActiveTab] = useState<string>('overview');
+  const [activeTab, setActiveTab] = useState<string>('maps');
   const [hydrated, setHydrated] = useState(false);
   const [checks, setChecksState] = useState<Record<string, boolean>>({});
 
@@ -47,14 +46,10 @@ function BostonNYCInner() {
   };
 
   const tabs = [
-    { id: 'overview', label: 'Overview' },
     { id: 'maps', label: 'Maps' },
     ...days.map((d) => ({ id: d.id, label: d.label })),
     { id: 'todos', label: 'To-do list' },
   ];
-
-  const allItems = todoSections.flatMap((s) => s.items);
-  const doneCount = allItems.filter((i) => checks[i.id]).length;
 
   const handleSwitch = (id: string) => {
     setActiveTab(id);
@@ -74,7 +69,6 @@ function BostonNYCInner() {
         <NowBar day={active.day} blockIndex={active.blockIndex} />
       ) : null}
       <main>
-        {activeTab === 'overview' && <Overview doneCount={doneCount} total={allItems.length} />}
         {activeTab === 'maps' && <MapsView days={days} checks={checks} />}
         {days.map((day) =>
           activeTab === day.id ? (
