@@ -1,17 +1,27 @@
 import type { Block } from '@/data/trip';
 import { mapsUrl } from '@/lib/schedule';
 
-export function ScheduleBlock({ block, time }: { block: Block; time: string }) {
-  const slotClass =
+export function ScheduleBlock({
+  block,
+  time,
+  isNow,
+}: {
+  block: Block;
+  time: string;
+  isNow?: boolean;
+}) {
+  const baseClass =
     block.type === 'travel'
       ? 'activity-slot travel-block'
       : block.type === 'free'
       ? 'activity-slot free-block'
       : 'activity-slot';
+  const slotClass = isNow ? `${baseClass} is-now` : baseClass;
+  const timeClass = isNow ? 'time-slot is-now' : 'time-slot';
 
   return (
     <>
-      <div className="time-slot">{time}</div>
+      <div className={timeClass}>{time}</div>
       <div className={slotClass}>
         <h4>{block.title}</h4>
         {block.location ? (

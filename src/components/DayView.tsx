@@ -2,7 +2,7 @@ import type { Day } from '@/data/trip';
 import { computeBlockTimes, formatTime } from '@/lib/schedule';
 import { ScheduleBlock } from './ScheduleBlock';
 
-export function DayView({ day }: { day: Day }) {
+export function DayView({ day, activeBlockIndex }: { day: Day; activeBlockIndex?: number | null }) {
   const times = computeBlockTimes(day);
   return (
     <>
@@ -15,7 +15,12 @@ export function DayView({ day }: { day: Day }) {
       </div>
       <div className="schedule-grid">
         {day.blocks.map((block, i) => (
-          <ScheduleBlock key={block.id} block={block} time={formatTime(times[i].start)} />
+          <ScheduleBlock
+            key={block.id}
+            block={block}
+            time={formatTime(times[i].start)}
+            isNow={i === activeBlockIndex}
+          />
         ))}
       </div>
     </>
