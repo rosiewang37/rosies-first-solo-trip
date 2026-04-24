@@ -301,6 +301,40 @@ main { max-width: 980px; margin: 0 auto; padding: 32px 24px; }
 .trip-card .trip-card-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; color: var(--blue-dark); font-family: var(--font-fraunces), serif; }
 .trip-card .trip-card-meta { font-size: 14px; color: var(--text-soft); }
 
+/* Now bar */
+.now-bar {
+  background: var(--yellow);
+  color: var(--blue-dark);
+  padding: 12px 20px;
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 50px;
+  z-index: 9;
+  font-family: var(--font-inter), sans-serif;
+  box-shadow: 0 2px 8px rgba(29, 53, 109, 0.12);
+}
+.now-bar-item { display: flex; flex-direction: column; gap: 2px; }
+.now-bar-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  color: #7A5D00;
+  font-weight: 700;
+}
+.now-bar-title { font-size: 14px; font-weight: 600; color: var(--blue-dark); }
+
+/* Now block highlight */
+.activity-slot.is-now {
+  background: #FFF9DB;
+}
+.time-slot.is-now {
+  background: #FFF9DB;
+  color: var(--blue-dark);
+  font-weight: 700;
+  box-shadow: inset 4px 0 0 0 var(--yellow);
+}
 /* Responsive */
 @media (max-width: 640px) {
   header { padding: 24px 20px; }
