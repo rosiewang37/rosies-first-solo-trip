@@ -196,6 +196,75 @@ main { max-width: 980px; margin: 0 auto; padding: 32px 24px; }
 }
 .sub-item.done .sub-name { text-decoration: line-through; }
 
+.custom-spots { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.custom-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.custom-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 6px 10px;
+  background: var(--card);
+  border: 1px dashed var(--border-soft);
+  border-radius: 8px;
+}
+.custom-item input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  accent-color: var(--blue-dark);
+  flex-shrink: 0;
+}
+.custom-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--blue-bright);
+  text-decoration: underline;
+  text-decoration-color: rgba(54, 123, 202, 0.4);
+  text-underline-offset: 2px;
+  overflow-wrap: anywhere;
+}
+.custom-name:hover { text-decoration-color: var(--blue-bright); }
+.custom-item.done .custom-name { text-decoration: line-through; color: var(--text-muted); }
+.custom-remove {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.custom-remove:hover { background: var(--border-soft); color: var(--text); }
+.custom-add { display: flex; gap: 6px; }
+.custom-add input {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 10px;
+  font-size: 13px;
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  color: inherit;
+  font-family: inherit;
+}
+.custom-add input:focus { outline: 2px solid var(--blue-bright); outline-offset: -2px; }
+.custom-add button {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--blue-bright);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.custom-add button:disabled { background: var(--border-soft); color: var(--text-muted); cursor: not-allowed; }
+
 .tag-row { margin-top: 10px; }
 .activity-slot .cost {
   display: inline-block;

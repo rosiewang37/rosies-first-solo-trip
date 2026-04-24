@@ -1,20 +1,29 @@
 import type { Day } from '@/data/trip';
+import type { CustomSpot } from '@/lib/customs';
 import { computeBlockTimes, formatTime, mapsUrl } from '@/lib/schedule';
 import { ScheduleBlock } from './ScheduleBlock';
+import { CustomSpots } from './CustomSpots';
 
 export function DayView({
   day,
   activeBlockIndex,
   checks,
   onToggle,
+  customs,
+  onAddCustom,
+  onRemoveCustom,
 }: {
   day: Day;
   activeBlockIndex?: number | null;
   checks: Record<string, boolean>;
   onToggle: (id: string, checked: boolean) => void;
+  customs: CustomSpot[];
+  onAddCustom: (parent: string, name: string) => void;
+  onRemoveCustom: (id: string) => void;
 }) {
   const times = computeBlockTimes(day);
   const optional = day.optionalVisits ?? [];
+  const optParent = `${day.id}:opt`;
   return (
     <>
       <div className="day-header">
@@ -33,14 +42,17 @@ export function DayView({
             isNow={i === activeBlockIndex}
             checks={checks}
             onToggle={onToggle}
+            customs={customs}
+            onAddCustom={onAddCustom}
+            onRemoveCustom={onRemoveCustom}
           />
         ))}
       </div>
 
-      {optional.length > 0 ? (
-        <section className="optional-visits">
-          <h3>Optional nearby stops</h3>
-          <p className="optional-intro">Spare time? Tap to open in Maps, or check one off if you visit.</p>
+      <section className="optional-visits">
+        <h3>Optional nearby stops</h3>
+        <p className="optional-intro">Spare time? Tap to open in Maps, or check one off if you visit.</p>
+        {optional.length > 0 ? (
           <ul className="optional-list">
             {optional.map((loc) => {
               const id = `${day.id}:opt:${loc.address}`;
@@ -63,8 +75,17 @@ export function DayView({
               );
             })}
           </ul>
-        </section>
-      ) : null}
+        ) : null}
+        <CustomSpots
+          parent={optParent}
+          items={customs}
+          checks={checks}
+          onToggle={onToggle}
+          onAdd={onAddCustom}
+          onRemove={onRemoveCustom}
+          placeholder="Add a spot you visited"
+        />
+      </section>
     </>
   );
 }

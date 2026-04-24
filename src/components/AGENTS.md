@@ -9,6 +9,7 @@ Stateless (or near-stateless) UI. Components take props, render DOM. They don't 
 | `Nav.tsx` | Tab bar across the top |
 | `DayView.tsx` | One day's schedule: blocks stacked vertically plus the optional-visits section |
 | `ScheduleBlock.tsx` | A single time-block. Collapsed by default; expand to see sub-locations or restaurant picks with per-place Google Maps links and sub-checkboxes. Handles all `Block.kind` variants. |
+| `CustomSpots.tsx` | User-added spots (extra restaurants inside an eat block, extra stops under optional visits). Input field + Add button. Each spot gets a checkbox, a Google Maps search link on its name, and an × remove button. Filters `customs` by `parent`. |
 | `NowBar.tsx` | Live "Now / Next" indicator shown on the active day |
 | `ProgressBar.tsx` | Todo-list progress bar |
 | `TodoList.tsx` | Pre-trip / day-of / packing checklist tab |

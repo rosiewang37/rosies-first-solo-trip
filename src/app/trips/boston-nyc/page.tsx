@@ -9,6 +9,7 @@ import { DayView } from '@/components/DayView';
 import { TodoList } from '@/components/TodoList';
 import { NowBar } from '@/components/NowBar';
 import { getChecks, setChecks as persistChecks } from '@/lib/storage';
+import { getCustoms, setCustoms as persistCustoms, type CustomSpot } from '@/lib/customs';
 import { getNow, findActiveBlock } from '@/lib/clock';
 
 const MapsView = dynamic(() => import('@/components/MapsView'), { ssr: false });
@@ -31,9 +32,11 @@ function BostonNYCInner() {
   const [activeTab, setActiveTab] = useState<string>('maps');
   const [hydrated, setHydrated] = useState(false);
   const [checks, setChecksState] = useState<Record<string, boolean>>({});
+  const [customs, setCustomsState] = useState<CustomSpot[]>([]);
 
   useEffect(() => {
     setChecksState(getChecks());
+    setCustomsState(getCustoms());
     const todayDay = days.find((d) => d.dateISO === now.dateISO);
     if (todayDay) setActiveTab(todayDay.id);
     setHydrated(true);
@@ -43,6 +46,25 @@ function BostonNYCInner() {
     const next = { ...checks, [id]: checked };
     setChecksState(next);
     persistChecks(next);
+  };
+
+  const handleAddCustom = (parent: string, name: string) => {
+    const id = `custom:${Date.now()}:${Math.random().toString(36).slice(2, 8)}`;
+    const next = [...customs, { id, name, parent }];
+    setCustomsState(next);
+    persistCustoms(next);
+  };
+
+  const handleRemoveCustom = (id: string) => {
+    const next = customs.filter((c) => c.id !== id);
+    setCustomsState(next);
+    persistCustoms(next);
+    if (checks[id]) {
+      const nextChecks = { ...checks };
+      delete nextChecks[id];
+      setChecksState(nextChecks);
+      persistChecks(nextChecks);
+    }
   };
 
   const tabs = [
@@ -78,6 +100,9 @@ function BostonNYCInner() {
               activeBlockIndex={active && active.day.id === day.id ? active.blockIndex : null}
               checks={checks}
               onToggle={handleToggle}
+              customs={customs}
+              onAddCustom={handleAddCustom}
+              onRemoveCustom={handleRemoveCustom}
             />
           ) : null
         )}

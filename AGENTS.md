@@ -28,7 +28,8 @@ Each folder inside `src/` has its own `AGENTS.md` describing its purpose, entry 
 
 ## Persistence and state
 
-- Checkbox state (what Rosie has visited) lives in `localStorage` via `src/lib/storage.ts`. Keys are free-form strings; top-level blocks use `block.id`, sub-items use `${block.id}:${sub.address}`.
+- Checkbox state (what Rosie has visited) lives in `localStorage` via `src/lib/storage.ts`. Keys are free-form strings; sub-items use `${block.id}:${sub.address}`, optional visits use `${day.id}:opt:${addr}`.
+- Custom user-added spots (restaurants inside eat blocks, stops under optional visits) live separately in `localStorage` via `src/lib/customs.ts` as a list of `{ id, name, parent }`. The `id` is also used as a checkbox key so the same `checks` record toggles them. Custom items don't appear on the pin map (no coords).
 - Live "now / next" indicator uses real time unless `?now=2026-04-28T14:00` query param overrides it (see `src/lib/clock.ts`).
 - No backend. No session cookies. No auth.
 

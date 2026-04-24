@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import type { Block, Location } from '@/data/trip';
+import type { CustomSpot } from '@/lib/customs';
 import { mapsUrl } from '@/lib/schedule';
+import { CustomSpots } from './CustomSpots';
 
 export function ScheduleBlock({
   block,
@@ -10,12 +12,18 @@ export function ScheduleBlock({
   isNow,
   checks,
   onToggle,
+  customs,
+  onAddCustom,
+  onRemoveCustom,
 }: {
   block: Block;
   time: string;
   isNow?: boolean;
   checks: Record<string, boolean>;
   onToggle: (id: string, checked: boolean) => void;
+  customs: CustomSpot[];
+  onAddCustom: (parent: string, name: string) => void;
+  onRemoveCustom: (id: string) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -82,6 +90,18 @@ export function ScheduleBlock({
               </ul>
             ) : null}
 
+            {kind === 'eat' ? (
+              <CustomSpots
+                parent={block.id}
+                items={customs}
+                checks={checks}
+                onToggle={onToggle}
+                onAdd={onAddCustom}
+                onRemove={onRemoveCustom}
+                placeholder="Add a restaurant"
+              />
+            ) : null}
+
             {block.tags.length > 0 ? (
               <div className="tag-row">
                 {block.tags.map((t, i) => (
@@ -131,4 +151,3 @@ function SubItem({
     </li>
   );
 }
-
