@@ -236,6 +236,9 @@ export const days: Day[] = [
         title: 'Drive Kingston → Boston',
         details: '8-9 hour drive. Pack snacks, download offline maps, queue up podcasts.',
         type: 'travel',
+        locations: [
+          { name: 'The Smith (South End)', address: '99 E Dedham St, Boston, MA', lat: 42.3398, lng: -71.0743 },
+        ],
         tags: [{ type: 'transit', text: '8-9 hrs by car' }],
       },
       {
@@ -257,6 +260,9 @@ export const days: Day[] = [
         title: 'Head to the North End',
         details: '20 min walk, or T from Back Bay to Haymarket (15 min).',
         type: 'travel',
+        locations: [
+          { name: 'North End (Hanover St)', address: 'Hanover St, Boston, MA', lat: 42.3640, lng: -71.0536 },
+        ],
         tags: [{ type: 'transit', text: '20 min walk or Orange Line' }],
       },
       {
@@ -286,6 +292,9 @@ export const days: Day[] = [
         title: 'Walk back to The Smith',
         details: 'Quick walk back, early sleep before a big day tomorrow.',
         type: 'travel',
+        locations: [
+          { name: 'The Smith (South End)', address: '99 E Dedham St, Boston, MA', lat: 42.3398, lng: -71.0743 },
+        ],
         tags: [{ type: 'transit', text: '20 min walk' }],
       },
     ],
@@ -322,6 +331,9 @@ export const days: Day[] = [
         title: 'Head to Boston Common',
         details: '20 min walk or T: Back Bay → Park Street.',
         type: 'travel',
+        locations: [
+          { name: 'Boston Common', address: 'Boston Common, Boston, MA', lat: 42.3551, lng: -71.0656 },
+        ],
         tags: [{ type: 'transit', text: '20 min walk' }],
       },
       {
@@ -391,6 +403,9 @@ export const days: Day[] = [
         title: 'T back downtown',
         details: 'Orange Line from Haymarket.',
         type: 'travel',
+        locations: [
+          { name: 'Back Bay Station', address: '145 Dartmouth St, Boston, MA', lat: 42.3472, lng: -71.0753 },
+        ],
         tags: [{ type: 'transit', text: 'Orange Line' }],
       },
       {
@@ -420,6 +435,9 @@ export const days: Day[] = [
         title: 'Back to The Smith',
         details: 'T or Uber. Long day, good sleep ahead.',
         type: 'travel',
+        locations: [
+          { name: 'The Smith (South End)', address: '99 E Dedham St, Boston, MA', lat: 42.3398, lng: -71.0743 },
+        ],
         tags: [{ type: 'transit', text: 'T or Uber' }],
       },
     ],
@@ -456,6 +474,9 @@ export const days: Day[] = [
         title: 'T to Harvard',
         details: 'Back Bay → Park St → Red Line to Harvard. ~30 min.',
         type: 'travel',
+        locations: [
+          { name: 'Harvard Square', address: 'Harvard Square, Cambridge, MA', lat: 42.3736, lng: -71.1190 },
+        ],
         tags: [{ type: 'transit', text: 'Red Line, $2.40' }],
       },
       {
@@ -517,6 +538,9 @@ export const days: Day[] = [
         title: 'Back across the Charles',
         details: 'Red Line, or walk Longfellow Bridge for river views (30 min).',
         type: 'travel',
+        locations: [
+          { name: 'Longfellow Bridge', address: 'Longfellow Bridge, Cambridge, MA', lat: 42.3617, lng: -71.0724 },
+        ],
         tags: [{ type: 'transit', text: 'Red Line or 30 min walk' }],
       },
       {
@@ -762,6 +786,9 @@ export const days: Day[] = [
         title: 'Subway to Battery Park',
         details: '7 train + 4/5 Express to Bowling Green.',
         type: 'travel',
+        locations: [
+          { name: 'Bowling Green Station', address: 'Bowling Green, New York, NY', lat: 40.7049, lng: -74.0135 },
+        ],
         tags: [{ type: 'transit', text: '7 + 4/5 Express' }],
       },
       {
@@ -817,6 +844,9 @@ export const days: Day[] = [
         title: 'Ferry back to Battery',
         details: 'Back to Manhattan.',
         type: 'travel',
+        locations: [
+          { name: 'Battery Park', address: 'Battery Park, New York, NY', lat: 40.7033, lng: -74.0170 },
+        ],
         tags: [],
       },
       {
@@ -923,6 +953,9 @@ export const days: Day[] = [
         title: 'F train to LIC',
         details: 'York St → Court Sq. Walk home.',
         type: 'travel',
+        locations: [
+          { name: 'Court Sq Station', address: 'Court Sq, Long Island City, NY', lat: 40.7470, lng: -73.9448 },
+        ],
         tags: [{ type: 'transit', text: 'F train, 15 min' }],
       },
     ],
@@ -962,6 +995,9 @@ export const days: Day[] = [
         title: '7 train to Midtown',
         details: 'Vernon Blvd → Grand Central.',
         type: 'travel',
+        locations: [
+          { name: 'Grand Central Terminal', address: '89 E 42nd St, New York, NY', lat: 40.7527, lng: -73.9772 },
+        ],
         tags: [{ type: 'transit', text: '7 train' }],
       },
       {
@@ -1052,6 +1088,9 @@ export const days: Day[] = [
         title: '7 train back to LIC',
         details: 'Late but the 7 runs all night.',
         type: 'travel',
+        locations: [
+          { name: 'Vernon Blvd-Jackson Ave Station', address: 'Vernon Blvd & Jackson Ave, Long Island City, NY', lat: 40.7426, lng: -73.9537 },
+        ],
         tags: [{ type: 'transit', text: '7 train' }],
       },
     ],
@@ -1079,6 +1118,9 @@ export const days: Day[] = [
         title: 'Subway to Chelsea',
         details: '7 → Times Sq → 1 to 14th St.',
         type: 'travel',
+        locations: [
+          { name: '14th St Station (1 train)', address: '14th St & 7th Ave, New York, NY', lat: 40.7378, lng: -73.9997 },
+        ],
         tags: [{ type: 'transit', text: '7 + 1 train' }],
       },
       {
@@ -1168,6 +1210,9 @@ export const days: Day[] = [
         title: 'F train to LES',
         details: 'Delancey-Essex.',
         type: 'travel',
+        locations: [
+          { name: 'Delancey St-Essex St Station', address: 'Delancey St & Essex St, New York, NY', lat: 40.7189, lng: -73.9881 },
+        ],
         tags: [{ type: 'transit', text: 'F train' }],
       },
       {
