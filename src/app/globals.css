@@ -96,7 +96,7 @@ main { max-width: 980px; margin: 0 auto; padding: 32px 24px; }
 /* Schedule blocks */
 .schedule-grid {
   display: grid;
-  grid-template-columns: 100px 1fr;
+  grid-template-columns: 100px minmax(0, 1fr);
   gap: 0;
   background: var(--card);
   border: 1px solid var(--border);
@@ -178,7 +178,7 @@ main { max-width: 980px; margin: 0 auto; padding: 32px 24px; }
   accent-color: var(--blue-dark);
   flex-shrink: 0;
 }
-.sub-content { flex: 1; min-width: 0; }
+.sub-content { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .sub-name {
   display: inline-block;
   font-size: 14px;
