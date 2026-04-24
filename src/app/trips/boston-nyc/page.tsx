@@ -8,7 +8,7 @@ import { Nav } from '@/components/Nav';
 import { DayView } from '@/components/DayView';
 import { TodoList } from '@/components/TodoList';
 import { NowBar } from '@/components/NowBar';
-import { getChecks, setChecks as persistChecks } from '@/lib/storage';
+import { getChecks, setChecks as persistChecks, getActiveTab, setActiveTab as persistActiveTab } from '@/lib/storage';
 import { getCustoms, setCustoms as persistCustoms, type CustomSpot } from '@/lib/customs';
 import { getNow, findActiveBlock } from '@/lib/clock';
 
@@ -37,8 +37,14 @@ function BostonNYCInner() {
   useEffect(() => {
     setChecksState(getChecks());
     setCustomsState(getCustoms());
-    const todayDay = days.find((d) => d.dateISO === now.dateISO);
-    if (todayDay) setActiveTab(todayDay.id);
+    const saved = getActiveTab();
+    const validIds = new Set(['maps', 'todos', ...days.map((d) => d.id)]);
+    if (saved && validIds.has(saved)) {
+      setActiveTab(saved);
+    } else {
+      const todayDay = days.find((d) => d.dateISO === now.dateISO);
+      if (todayDay) setActiveTab(todayDay.id);
+    }
     setHydrated(true);
   }, [now.dateISO]);
 
@@ -75,6 +81,7 @@ function BostonNYCInner() {
 
   const handleSwitch = (id: string) => {
     setActiveTab(id);
+    persistActiveTab(id);
     if (typeof window !== 'undefined') window.scrollTo(0, 0);
   };
 
