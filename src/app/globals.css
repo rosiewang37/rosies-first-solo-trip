@@ -159,13 +159,6 @@ main { max-width: 980px; margin: 0 auto; padding: 32px 24px; }
   font-weight: 600;
   font-family: var(--font-inter), sans-serif;
 }
-.travel-block {
-  background: var(--blue-dark) !important;
-  color: var(--white);
-}
-.travel-block h4 { color: var(--white); }
-.travel-block .location, .travel-block .details { color: #B7C2DB; }
-.travel-block .location a { color: #B7C2DB; }
 .free-block { background: var(--card-soft); color: var(--text-muted); font-style: italic; }
 
 /* Todo list */
