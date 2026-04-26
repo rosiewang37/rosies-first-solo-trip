@@ -2,8 +2,10 @@
 
 import type { Block, Location } from '@/data/trip';
 import type { CustomSpot } from '@/lib/customs';
+import type { Photo } from '@/lib/photos';
 import { mapsUrl } from '@/lib/schedule';
 import { CustomSpots } from './CustomSpots';
+import { PhotoSection } from './PhotoSection';
 
 export function ScheduleBlock({
   block,
@@ -16,6 +18,10 @@ export function ScheduleBlock({
   onRemoveCustom,
   expanded,
   onToggleExpand,
+  photos,
+  isEditor,
+  onUploadPhoto,
+  onDeletePhoto,
 }: {
   block: Block;
   time: string;
@@ -27,6 +33,10 @@ export function ScheduleBlock({
   onRemoveCustom: (id: string) => void;
   expanded: boolean;
   onToggleExpand: () => void;
+  photos: Photo[];
+  isEditor: boolean;
+  onUploadPhoto: (file: File, blockId: string) => Promise<void>;
+  onDeletePhoto: (id: string) => Promise<void>;
 }) {
   const kind = block.kind;
   const baseClass =
@@ -102,6 +112,14 @@ export function ScheduleBlock({
                 placeholder="Add a restaurant"
               />
             ) : null}
+
+            <PhotoSection
+              blockId={block.id}
+              photos={photos.filter((p) => p.blockId === block.id)}
+              isEditor={isEditor}
+              onUpload={onUploadPhoto}
+              onDelete={onDeletePhoto}
+            />
 
             {block.tags.length > 0 ? (
               <div className="tag-row">

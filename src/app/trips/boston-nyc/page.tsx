@@ -18,6 +18,8 @@ import {
 } from '@/lib/storage';
 import { getCustoms, setCustoms as persistCustoms, type CustomSpot } from '@/lib/customs';
 import { getNow, findActiveBlock } from '@/lib/clock';
+import { captureEditTokenFromUrl, isEditor as checkIsEditor } from '@/lib/editToken';
+import { getPhotos, uploadPhoto, deletePhoto, type Photo } from '@/lib/photos';
 
 const MapsView = dynamic(() => import('@/components/MapsView'), { ssr: false });
 
@@ -41,8 +43,12 @@ function BostonNYCInner() {
   const [checks, setChecksState] = useState<Record<string, boolean>>({});
   const [customs, setCustomsState] = useState<CustomSpot[]>([]);
   const [expanded, setExpandedState] = useState<Record<string, boolean>>({});
+  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [isEditor, setIsEditor] = useState(false);
 
   useEffect(() => {
+    captureEditTokenFromUrl();
+    setIsEditor(checkIsEditor());
     setChecksState(getChecks());
     setCustomsState(getCustoms());
     setExpandedState(getExpanded());
@@ -54,6 +60,7 @@ function BostonNYCInner() {
       const todayDay = days.find((d) => d.dateISO === now.dateISO);
       if (todayDay) setActiveTab(todayDay.id);
     }
+    getPhotos().then(setPhotos).catch(() => setPhotos([]));
     setHydrated(true);
   }, [now.dateISO]);
 
@@ -87,6 +94,16 @@ function BostonNYCInner() {
       setChecksState(nextChecks);
       persistChecks(nextChecks);
     }
+  };
+
+  const handleUploadPhoto = async (file: File, blockId: string) => {
+    const photo = await uploadPhoto(file, blockId);
+    setPhotos((prev) => [...prev, photo]);
+  };
+
+  const handleDeletePhoto = async (id: string) => {
+    await deletePhoto(id);
+    setPhotos((prev) => prev.filter((p) => p.id !== id));
   };
 
   const tabs = [
@@ -128,6 +145,10 @@ function BostonNYCInner() {
               onRemoveCustom={handleRemoveCustom}
               expanded={expanded}
               onToggleExpand={handleToggleExpand}
+              photos={photos}
+              isEditor={isEditor}
+              onUploadPhoto={handleUploadPhoto}
+              onDeletePhoto={handleDeletePhoto}
             />
           ) : null
         )}

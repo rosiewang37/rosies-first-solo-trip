@@ -1,5 +1,6 @@
 import type { Day } from '@/data/trip';
 import type { CustomSpot } from '@/lib/customs';
+import type { Photo } from '@/lib/photos';
 import { computeBlockTimes, formatTime, mapsUrl } from '@/lib/schedule';
 import { ScheduleBlock } from './ScheduleBlock';
 import { CustomSpots } from './CustomSpots';
@@ -14,6 +15,10 @@ export function DayView({
   onRemoveCustom,
   expanded,
   onToggleExpand,
+  photos,
+  isEditor,
+  onUploadPhoto,
+  onDeletePhoto,
 }: {
   day: Day;
   activeBlockIndex?: number | null;
@@ -24,6 +29,10 @@ export function DayView({
   onRemoveCustom: (id: string) => void;
   expanded: Record<string, boolean>;
   onToggleExpand: (id: string) => void;
+  photos: Photo[];
+  isEditor: boolean;
+  onUploadPhoto: (file: File, blockId: string) => Promise<void>;
+  onDeletePhoto: (id: string) => Promise<void>;
 }) {
   const times = computeBlockTimes(day);
   const optional = day.optionalVisits ?? [];
@@ -51,6 +60,10 @@ export function DayView({
             onRemoveCustom={onRemoveCustom}
             expanded={!!expanded[block.id]}
             onToggleExpand={() => onToggleExpand(block.id)}
+            photos={photos}
+            isEditor={isEditor}
+            onUploadPhoto={onUploadPhoto}
+            onDeletePhoto={onDeletePhoto}
           />
         ))}
       </div>
